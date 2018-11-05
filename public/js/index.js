@@ -75038,29 +75038,86 @@ var render = function() {
     { attrs: { fluid: "", "grid-list-md": "" } },
     [
       _c(
-        "v-card",
+        "v-layout",
         [
           _c(
             "v-flex",
-            { staticClass: "px-4 pb-4 pt-2" },
+            { attrs: { xs8: "" } },
             [
               _c(
-                "v-card-title",
-                { staticClass: "pb-0 mb-0", attrs: { "primary-title": "" } },
+                "v-card",
                 [
                   _c(
-                    "div",
-                    { staticClass: "full-width" },
+                    "v-toolbar",
+                    { attrs: { dark: "", card: "", color: "primary" } },
                     [
-                      _c("h2", { staticClass: "headline mb-0" }, [
-                        _vm._v("Test Cases")
-                      ]),
+                      _c("v-toolbar-title", [_vm._v("Test Cases")]),
                       _vm._v(" "),
-                      _c("v-btn", [_vm._v("Upload")])
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        { attrs: { flat: "" } },
+                        [
+                          _vm._v("Upload"),
+                          _c("v-icon", { attrs: { right: "" } }, [
+                            _vm._v("cloud_upload")
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-card-title")
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { xs4: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", card: "", color: "primary" } },
+                    [_c("v-toolbar-title", [_vm._v("Templates")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-title",
+                    [
+                      _c(
+                        "v-layout",
+                        { attrs: { "align-center": "" } },
+                        [
+                          _c(
+                            "v-btn",
+                            { attrs: { color: "secondary lighten-3" } },
+                            [
+                              _vm._v("Download XLS Template"),
+                              _c("v-icon", { attrs: { right: "" } }, [
+                                _vm._v("cloud_download")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
                     ],
                     1
                   )
-                ]
+                ],
+                1
               )
             ],
             1
