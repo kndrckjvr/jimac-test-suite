@@ -11,18 +11,21 @@
                     </transition>
                 </v-container>
             </v-content>
+        <snackbar/>
     </v-app>
 </template>
 
 <script>
 import Navigation from './includes/Navigation'
 import Toolbar from './includes/Toolbar'
+import Snackbar from './includes/Snackbar'
 
 export default {
     name: 'App',
     components: {
         Toolbar,
-        Navigation
+        Navigation,
+        Snackbar
     },
     methods: {
         beforeLeave(element) {

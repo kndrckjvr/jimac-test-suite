@@ -2,26 +2,35 @@ require('./bootstrap');
 
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import VueCookies from 'vue-cookies'
 import router from './router'
 import store from './store'
 import App from './App'
+import checkAuth from './utils/authHas'
 
 Vue.use(Vuetify)
-
+Vue.use(VueCookies)
+Vue.config.productionTip = false
+Vue.prototype.$checkAuth = checkAuth
+VueCookies.config('30d')
+if(VueCookies.get('auth') === null) {
+    VueCookies.set('auth', 0)
+} else {
+    store.commit('auth/changeAuth', {auth: VueCookies.get('auth')});
+}
 router.beforeEach((to, from, next) => {
-    store.commit('extras/setToolbarTitle', {name:to.name})
-    next()
-    // if(checkAuth(to.meta.auth, store.state.auth.access, -1)) {
-    //     next()
-    // } else {
-    //     if(checkAuth(store.state.auth.access, [-1, 1, 2, 3, 4])) {
-    //         if(checkAuth(store.state.auth.access, [1])) {
-    //             next('/dashboard')
-    //         }
-    //     } else {
-    //         next('/')
-    //     }
-    // }
+    if(checkAuth(to.meta.auth, VueCookies.get('auth'), -1)) {
+        store.commit('extras/setToolbarTitle', {name:to.name})
+        next()
+    } else {
+        if(checkAuth(VueCookies.get('auth'), [-1, 1, 2, 3, 4])) {
+            if(checkAuth(VueCookies.get('auth'), [1])) {
+                next('/dashboard')
+            }
+        } else {
+            next('/')
+        }
+    }
 })
 
 new Vue({

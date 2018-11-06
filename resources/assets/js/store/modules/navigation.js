@@ -4,17 +4,32 @@ export const state = {
         {
             title: 'Dashboard',
             icon: 'dashboard',
-            to: '/'
+            to: '/dashboard',
+            auth: [1, 2]
         },
         {
             title: 'Execute Tests',
             icon: 'build',
-            to: '/execute'
+            to: '/execute',
+            auth: [1, 2]
         },
         {
             title: 'Logout',
             icon: 'exit_to_app',
-            to: '/logout'
+            click: 'logout',
+            auth: [1, 2]
+        },
+        {
+            title: 'Home',
+            icon: 'home',
+            to: '/',
+            auth: [0]
+        },
+        {
+            title: 'Login',
+            icon: 'person',
+            to: '/login',
+            auth: [0]
         }
     ]
 }

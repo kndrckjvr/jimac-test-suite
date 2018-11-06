@@ -5,7 +5,7 @@
         :clipped=true
         :value="drawer"
         >
-        <v-list class="pa-1">
+        <v-list class="pa-1" v-if="$checkAuth([1,2], auth)">
             <v-list-tile avatar>
                 <v-list-tile-avatar>
                     <!-- <img v-bind:src="user.image"> -->
@@ -22,8 +22,10 @@
             <v-divider></v-divider>
             <v-list-tile
             v-for="item in items"
+            v-if="$checkAuth(item.auth, auth)"
             :key="item.title"
-            :to="item.to" >
+            :to="item.to"
+            @click="listItemClick(item.click)" >
             <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -47,8 +49,21 @@ export default {
     }),
     computed: mapGetters({
         drawer: 'navigation/shown',
-        items: 'navigation/items'
-    })
+        items: 'navigation/items',
+        auth: 'auth/userAuth'
+    }),
+    methods: {
+        logout() {
+            this.$store.commit('auth/changeAuth', {auth: 0});
+            this.$cookies.set('auth', 0)
+            this.$router.push('/login')
+        },
+        listItemClick(e) {
+            if (typeof e === 'string') {
+                this[e]()
+            }
+        }
+    }
 }
 </script>
 
