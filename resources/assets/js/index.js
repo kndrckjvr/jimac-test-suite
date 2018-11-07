@@ -13,7 +13,7 @@ Vue.use(VueCookies)
 Vue.config.productionTip = false
 Vue.prototype.$checkAuth = checkAuth
 VueCookies.config('30d')
-if(VueCookies.get('auth') === null) {
+if(!VueCookies.isKey("auth")) {
     VueCookies.set('auth', 0)
 } else {
     store.commit('auth/changeAuth', {auth: VueCookies.get('auth')});

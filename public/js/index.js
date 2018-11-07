@@ -23703,7 +23703,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = false;
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$checkAuth = __WEBPACK_IMPORTED_MODULE_6__utils_authHas__["a" /* default */];
 __WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.config('30d');
-if (__WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.get('auth') === null) {
+if (!__WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.isKey("auth")) {
     __WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.set('auth', 0);
 } else {
     __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('auth/changeAuth', { auth: __WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.get('auth') });
@@ -71460,6 +71460,9 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_vue__;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Dashboard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Dashboard__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Execute__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Execute___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Execute__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_CreateTestCase__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_CreateTestCase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_CreateTestCase__);
+
 
 
 
@@ -71507,6 +71510,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
     path: '/execute',
     name: 'Execute',
     component: __WEBPACK_IMPORTED_MODULE_5__components_Execute___default.a,
+    meta: {
+      auth: [1]
+    }
+  }, {
+    path: '/create',
+    name: 'Create Test Case',
+    component: __WEBPACK_IMPORTED_MODULE_6__components_CreateTestCase___default.a,
     meta: {
       auth: [1]
     }
@@ -74361,7 +74371,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -74483,6 +74493,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.loading = false;
                 if (res.data.status == 1) {
                     _this.$cookies.set('auth', res.data.auth);
+                    _this.$cookies.set('jts_token', res.data.token);
                     _this.$store.commit('auth/changeAuth', { auth: res.data.auth });
                     _this.$router.push('/dashboard');
                     return;
@@ -74888,6 +74899,9 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_dialog_UploadDialog__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_dialog_UploadDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__includes_dialog_UploadDialog__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_dialog_CreateTestCaseDialog__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_dialog_CreateTestCaseDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__includes_dialog_CreateTestCaseDialog__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(3);
 //
 //
 //
@@ -74941,183 +74955,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    UploadDialog: __WEBPACK_IMPORTED_MODULE_0__includes_dialog_UploadDialog___default.a
+    UploadDialog: __WEBPACK_IMPORTED_MODULE_0__includes_dialog_UploadDialog___default.a,
+    CreateTestCaseDialog: __WEBPACK_IMPORTED_MODULE_1__includes_dialog_CreateTestCaseDialog___default.a
   },
   data: function data() {
     return {
       totalDesserts: 0,
-      desserts: [],
-      loading: true,
+      testCases: [{
+        testCaseName: 'Test Case #1',
+        modules: '1',
+        passed: '100%',
+        failed: '0%',
+        skipped: '0%',
+        testCaseId: '1'
+      }],
+      loading: false,
       pagination: {},
-      headers: [{
-        text: 'Dessert (100g serving)',
-        align: 'center',
-        sortable: false,
-        value: 'name'
-      }, { text: 'Calories', value: 'calories' }, { text: 'Fat (g)', value: 'fat' }, { text: 'Carbs (g)', value: 'carbs' }, { text: 'Protein (g)', value: 'protein' }, { text: 'Execute', align: 'center', value: 'id', sortable: false }]
+      headers: [{ text: 'Test Case Name', value: 'testCaseName' }, { text: 'Number of Modules', value: 'modules' }, { text: 'Passed', value: 'passed' }, { text: 'Failed', value: 'failed' }, { text: 'Skipped', value: 'skipped' }, { text: 'Actions', value: 'testCaseId', sortable: false }]
     };
   },
-  watch: {
-    pagination: {
-      handler: function handler() {
-        var _this = this;
-
-        this.getDataFromApi().then(function (data) {
-          _this.desserts = data.items;
-          _this.totalDesserts = data.total;
-        });
-      },
-
-      deep: true
-    }
-  },
-  mounted: function mounted() {
-    var _this2 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this2.desserts = data.items;
-      _this2.totalDesserts = data.total;
-    });
-  },
+  mounted: function mounted() {},
 
   methods: {
+    openCreateTestCaseDialog: function openCreateTestCaseDialog() {
+      this.$store.commit('dialog/showDialog', { dialog: "createTestCaseDialog" });
+    },
     openUploadDialog: function openUploadDialog() {
       this.$store.commit('dialog/showDialog', { dialog: "uploadDialog" });
     },
-    getDataFromApi: function getDataFromApi() {
-      var _this3 = this;
-
-      this.loading = true;
-      return new Promise(function (resolve, reject) {
-        var _pagination = _this3.pagination,
-            sortBy = _pagination.sortBy,
-            descending = _pagination.descending,
-            page = _pagination.page,
-            rowsPerPage = _pagination.rowsPerPage;
-
-
-        var items = _this3.getDesserts();
-        var total = items.length;
-
-        if (_this3.pagination.sortBy) {
-          items = items.sort(function (a, b) {
-            var sortA = a[sortBy];
-            var sortB = b[sortBy];
-
-            if (descending) {
-              if (sortA < sortB) return 1;
-              if (sortA > sortB) return -1;
-              return 0;
-            } else {
-              if (sortA < sortB) return -1;
-              if (sortA > sortB) return 1;
-              return 0;
-            }
-          });
-        }
-
-        if (rowsPerPage > 0) {
-          items = items.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-        }
-
-        setTimeout(function () {
-          _this3.loading = false;
-          resolve({
-            items: items,
-            total: total
-          });
-        }, 1000);
-      });
-    },
-    getDesserts: function getDesserts() {
-      return [{
-        value: false,
-        name: 'Frozen Yogurt',
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: '1%'
-      }, {
-        value: false,
-        name: 'Ice cream sandwich',
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        iron: '1%'
-      }, {
-        value: false,
-        name: 'Eclair',
-        calories: 262,
-        fat: 16.0,
-        carbs: 23,
-        protein: 6.0,
-        iron: '7%'
-      }, {
-        value: false,
-        name: 'Cupcake',
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        iron: '8%'
-      }, {
-        value: false,
-        name: 'Gingerbread',
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        iron: '16%'
-      }, {
-        value: false,
-        name: 'Jelly bean',
-        calories: 375,
-        fat: 0.0,
-        carbs: 94,
-        protein: 0.0,
-        iron: '0%'
-      }, {
-        value: false,
-        name: 'Lollipop',
-        calories: 392,
-        fat: 0.2,
-        carbs: 98,
-        protein: 0,
-        iron: '2%'
-      }, {
-        value: false,
-        name: 'Honeycomb',
-        calories: 408,
-        fat: 3.2,
-        carbs: 87,
-        protein: 6.5,
-        iron: '45%'
-      }, {
-        value: false,
-        name: 'Donut',
-        calories: 452,
-        fat: 25.0,
-        carbs: 51,
-        protein: 4.9,
-        iron: '22%'
-      }, {
-        value: false,
-        name: 'KitKat',
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        iron: '6%'
-      }];
+    getData: function getData() {
+      axios.post(this.baseUrl + 'api/testcase/getdata', {
+        id: this.$cookies.get('jts_token')
+      }).then(function (res) {});
     }
-  }
+  },
+  computed: Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])({
+    baseUrl: 'extras/baseUrl'
+  })
 });
 
 /***/ }),
@@ -75172,66 +75069,160 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "v-card-title",
-                    [
-                      _c("v-data-table", {
-                        staticClass: "elevation-1 full-width",
-                        attrs: {
-                          headers: _vm.headers,
-                          items: _vm.desserts,
-                          pagination: _vm.pagination,
-                          "total-items": _vm.totalDesserts,
-                          loading: _vm.loading
-                        },
-                        on: {
-                          "update:pagination": function($event) {
-                            _vm.pagination = $event
-                          }
-                        },
-                        scopedSlots: _vm._u([
+                  _c("v-card-title", [
+                    _c(
+                      "div",
+                      { staticClass: "full-width" },
+                      [
+                        _c(
+                          "v-toolbar",
+                          { attrs: { flat: "", color: "white" } },
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass: "mb-2",
+                                attrs: {
+                                  icon: "",
+                                  color: "primary",
+                                  loading: _vm.loading
+                                }
+                              },
+                              [_c("v-icon", [_vm._v("refresh")])],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass: "mb-2",
+                                attrs: {
+                                  icon: "",
+                                  color: "primary",
+                                  loading: _vm.loading
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.openCreateTestCaseDialog()
+                                  }
+                                }
+                              },
+                              [_c("v-icon", [_vm._v("add")])],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-data-table",
                           {
-                            key: "items",
-                            fn: function(props) {
-                              return [
-                                _c("td", [_vm._v(_vm._s(props.item.name))]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-xs-center" }, [
-                                  _vm._v(_vm._s(props.item.calories))
-                                ]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-xs-center" }, [
-                                  _vm._v(_vm._s(props.item.fat))
-                                ]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-xs-center" }, [
-                                  _vm._v(_vm._s(props.item.carbs))
-                                ]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-xs-center" }, [
-                                  _vm._v(_vm._s(props.item.protein))
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  [
+                            staticClass: "elevation-1",
+                            attrs: {
+                              headers: _vm.headers,
+                              items: _vm.testCases,
+                              loading: _vm.loading,
+                              "hide-actions": ""
+                            },
+                            scopedSlots: _vm._u([
+                              {
+                                key: "items",
+                                fn: function(props) {
+                                  return [
+                                    _c("td", [
+                                      _c("strong", [
+                                        _vm._v(_vm._s(props.item.testCaseName))
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
                                     _c(
-                                      "v-btn",
-                                      { attrs: { icon: "", color: "gray" } },
-                                      [_c("v-icon", [_vm._v("build")])],
+                                      "td",
+                                      { staticClass: "text-xs-center" },
+                                      [_vm._v(_vm._s(props.item.modules))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      { staticClass: "text-xs-center" },
+                                      [_vm._v(_vm._s(props.item.passed))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      { staticClass: "text-xs-center" },
+                                      [_vm._v(_vm._s(props.item.failed))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      { staticClass: "text-xs-center" },
+                                      [_vm._v(_vm._s(props.item.skipped))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      { staticClass: "justify-center px-0" },
+                                      [
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            staticClass: "mr-2",
+                                            attrs: { small: "" },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.editItem(props.item)
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                              edit\n                            "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            attrs: { small: "" },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.deleteItem(props.item)
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                              delete\n                            "
+                                            )
+                                          ]
+                                        )
+                                      ],
                                       1
                                     )
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  )
+                                  ]
+                                }
+                              }
+                            ])
+                          },
+                          [
+                            _c("v-progress-linear", {
+                              attrs: {
+                                slot: "progress",
+                                color: "blue",
+                                indeterminate: ""
+                              },
+                              slot: "progress"
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
                 ],
                 1
               )
@@ -75285,7 +75276,9 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("upload-dialog")
+      _c("upload-dialog"),
+      _vm._v(" "),
+      _c("create-test-case-dialog")
     ],
     1
   )
@@ -75412,13 +75405,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mutations", function() { return mutations; });
 var state = {
   showDialog: {
-    "uploadDialog": false
+    "uploadDialog": false,
+    "createTestCaseDialog": false
   }
 
   // getters
 };var getters = {
   uploadDialog: function uploadDialog(state) {
     return state.showDialog.uploadDialog;
+  },
+  createTestCaseDialog: function createTestCaseDialog(state) {
+    return state.showDialog.createTestCaseDialog;
   }
 
   // actions
@@ -75451,7 +75448,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var state = {
     loading: false,
     baseUrl: 'http://jimac-test-suite.test/',
-    toolbar_title: ''
+    toolbar_title: '',
+    test_case_title: 'Test Case #'
 
     // getters
 };var getters = {
@@ -75463,6 +75461,9 @@ var state = {
     },
     toolbar_title: function toolbar_title(state) {
         return state.toolbar_title;
+    },
+    test_case_title: function test_case_title(state) {
+        return state.test_case_title;
     }
 
     // actions
@@ -75474,6 +75475,10 @@ var state = {
     setToolbarTitle: function setToolbarTitle(_ref2) {
         var commit = _ref2.commit;
         return commit('setToolbarTitle', payload);
+    },
+    setTestCaseTitle: function setTestCaseTitle(_ref3) {
+        var commit = _ref3.commit;
+        return commit('setTestCaseTitle', payload);
     }
 
     // mutations
@@ -75483,6 +75488,9 @@ var state = {
     },
     setToolbarTitle: function setToolbarTitle(state, payload) {
         state.toolbar_title = payload.name;
+    },
+    setTestCaseTitle: function setTestCaseTitle(state, payload) {
+        state.test_case_title = payload.title;
     }
 };
 
@@ -75917,6 +75925,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         logout: function logout() {
             this.$store.commit('auth/changeAuth', { auth: 0 });
             this.$cookies.set('auth', 0);
+            this.$cookies.remove('jts_token');
             this.$router.push('/login');
         },
         listItemClick: function listItemClick(e) {
@@ -76859,6 +76868,640 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-7cc8f01e", module.exports)
+  }
+}
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(95)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(97)
+/* template */
+var __vue_template__ = __webpack_require__(98)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/CreateTestCase.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-352b7af5", Component.options)
+  } else {
+    hotAPI.reload("data-v-352b7af5", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(96);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(7)("23ded8d8", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-352b7af5\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateTestCase.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-352b7af5\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateTestCase.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 97 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      headers: [{ text: 'Module Name', value: 'moduleName' }, { text: 'Number of Scenarios', value: 'scenarios' }, { text: 'Passed', value: 'passed' }, { text: 'Failed', value: 'failed' }, { text: 'Skipped', value: 'skipped' }, { text: 'Actions', value: 'moduleId', sortable: false }],
+      modules: [{
+        moduleName: 'Item Maintenance',
+        scenarios: '1',
+        passed: '100%',
+        failed: '0%',
+        skipped: '0%',
+        moduleId: '1'
+      }]
+    };
+  },
+  mounted: function mounted() {},
+
+  computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({
+    test_case_title: 'extras/test_case_title'
+  })
+});
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { attrs: { "grid-list-md": "", fluid: "" } },
+    [
+      _c(
+        "v-layout",
+        [
+          _c(
+            "v-flex",
+            { attrs: { md12: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", card: "", color: "primary" } },
+                    [
+                      _c("v-toolbar-title", [
+                        _vm._v(_vm._s(_vm.$cookies.get("testCaseId")))
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-card-title", [
+                    _c(
+                      "div",
+                      { staticClass: "full-width" },
+                      [
+                        _c(
+                          "v-toolbar",
+                          { attrs: { flat: "", color: "white" } },
+                          [
+                            _c("v-toolbar-title", [_vm._v("Modules")]),
+                            _vm._v(" "),
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass: "mb-2",
+                                attrs: { icon: "", color: "primary" }
+                              },
+                              [_c("v-icon", [_vm._v("refresh")])],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass: "mb-2",
+                                attrs: { icon: "", color: "primary" }
+                              },
+                              [_c("v-icon", [_vm._v("add")])],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("v-data-table", {
+                          staticClass: "elevation-1",
+                          attrs: {
+                            headers: _vm.headers,
+                            items: _vm.modules,
+                            "hide-actions": ""
+                          },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "items",
+                              fn: function(props) {
+                                return [
+                                  _c("td", [
+                                    _c("strong", [
+                                      _vm._v(_vm._s(props.item.moduleName))
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-xs-center" }, [
+                                    _vm._v(_vm._s(props.item.scenarios))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-xs-center" }, [
+                                    _vm._v(_vm._s(props.item.passed))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-xs-center" }, [
+                                    _vm._v(_vm._s(props.item.failed))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-xs-center" }, [
+                                    _vm._v(_vm._s(props.item.skipped))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "justify-center px-0" },
+                                    [
+                                      _c(
+                                        "v-icon",
+                                        {
+                                          staticClass: "mr-2",
+                                          attrs: { small: "" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.editItem(props.item)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    edit\n                  "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-icon",
+                                        {
+                                          attrs: { small: "" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.deleteItem(props.item)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    delete\n                  "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ]
+                              }
+                            }
+                          ])
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-352b7af5", module.exports)
+  }
+}
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(100)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(102)
+/* template */
+var __vue_template__ = __webpack_require__(103)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/includes/dialog/CreateTestCaseDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9cf8fe4a", Component.options)
+  } else {
+    hotAPI.reload("data-v-9cf8fe4a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(101);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(7)("a5738f8a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-9cf8fe4a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateTestCaseDialog.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-9cf8fe4a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateTestCaseDialog.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 102 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'CreateTestCaseDialog',
+  data: function data() {
+    return {
+      testCaseTitle: 'Test Case #'
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.post(this.baseUrl + 'api/testcase/getlatestid', {
+      id: this.$cookies.get('jts_token')
+    }).then(function (res) {
+      _this.testCaseTitle = _this.testCaseTitle + res.data.testCaseId;
+    });
+  },
+
+  methods: {
+    closeCreateTestCaseDialog: function closeCreateTestCaseDialog() {
+      this.$store.commit('dialog/closeDialog', { dialog: "createTestCaseDialog" });
+    },
+    saveTestCaseName: function saveTestCaseName() {
+      this.$cookies.set('testCaseId', this.testCaseTitle);
+      this.closeCreateTestCaseDialog();
+      this.$store.commit('extras/setTestCaseTitle', { title: this.testCaseTitle });
+      this.$router.push('/create');
+    }
+  },
+  computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({
+    show: 'dialog/createTestCaseDialog',
+    baseUrl: 'extras/baseUrl'
+  })
+});
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    { attrs: { value: _vm.show, persistent: "", "max-width": "500" } },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-toolbar",
+            { attrs: { dark: "", card: "", color: "primary" } },
+            [
+              _c("v-icon", [_vm._v("insert_drive_file")]),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v("Create Test Case")]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.closeCreateTestCaseDialog()
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("close")])],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-title",
+            { staticClass: "pb-0 mb-0" },
+            [
+              _c(
+                "v-form",
+                { staticClass: "full-width" },
+                [
+                  _c(
+                    "v-container",
+                    { attrs: { fluid: "", "grid-list-md": "" } },
+                    [
+                      _c(
+                        "v-layout",
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Test Case Title" },
+                            model: {
+                              value: _vm.testCaseTitle,
+                              callback: function($$v) {
+                                _vm.testCaseTitle = $$v
+                              },
+                              expression: "testCaseTitle"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c(
+                "v-btn",
+                {
+                  staticClass: "full-width",
+                  attrs: { color: "primary" },
+                  on: {
+                    click: function($event) {
+                      _vm.saveTestCaseName()
+                    }
+                  }
+                },
+                [_vm._v("\n          Save\n        ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-9cf8fe4a", module.exports)
   }
 }
 

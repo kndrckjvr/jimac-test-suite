@@ -1,12 +1,14 @@
 export const state = { 
   showDialog: {
-    "uploadDialog": false
+    "uploadDialog": false,
+    "createTestCaseDialog": false
   }
 }
 
 // getters
 export const getters = {
-  uploadDialog: state => state.showDialog.uploadDialog
+  uploadDialog: state => state.showDialog.uploadDialog,
+  createTestCaseDialog: state => state.showDialog.createTestCaseDialog
 }
 
 // actions

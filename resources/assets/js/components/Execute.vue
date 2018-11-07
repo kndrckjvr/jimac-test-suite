@@ -9,26 +9,41 @@
                         <v-btn flat @click="openUploadDialog()">Upload<v-icon right>cloud_upload</v-icon></v-btn>
                     </v-toolbar>
                     <v-card-title>
-                        <v-data-table
+                        <div class="full-width">
+                          <v-toolbar flat color="white">
+                            <v-spacer></v-spacer>
+                            <v-btn icon color="primary" :loading="loading" class="mb-2"><v-icon>refresh</v-icon></v-btn>
+                            <v-btn icon color="primary" :loading="loading" @click="openCreateTestCaseDialog()" class="mb-2"><v-icon>add</v-icon></v-btn>
+                          </v-toolbar>
+                          <v-data-table
                             :headers="headers"
-                            :items="desserts"
-                            :pagination.sync="pagination"
-                            :total-items="totalDesserts"
+                            :items="testCases"
                             :loading="loading"
-                            class="elevation-1 full-width" >
+                            hide-actions
+                            class="elevation-1" >
+                            <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                             <template slot="items" slot-scope="props">
-                                <td>{{ props.item.name }}</td>
-                                <td class="text-xs-center">{{ props.item.calories }}</td>
-                                <td class="text-xs-center">{{ props.item.fat }}</td>
-                                <td class="text-xs-center">{{ props.item.carbs }}</td>
-                                <td class="text-xs-center">{{ props.item.protein }}</td>
-                                <td>
-                                    <v-btn icon color="gray">
-                                        <v-icon>build</v-icon>
-                                    </v-btn>
-                                </td>
+                              <td><strong>{{ props.item.testCaseName }}</strong></td>
+                              <td class="text-xs-center">{{ props.item.modules }}</td>
+                              <td class="text-xs-center">{{ props.item.passed }}</td>
+                              <td class="text-xs-center">{{ props.item.failed }}</td>
+                              <td class="text-xs-center">{{ props.item.skipped }}</td>
+                              <td class="justify-center px-0">
+                                <v-icon
+                                  small
+                                  class="mr-2"
+                                  @click="editItem(props.item)" >
+                                  edit
+                                </v-icon>
+                                <v-icon
+                                  small
+                                  @click="deleteItem(props.item)" >
+                                  delete
+                                </v-icon>
+                              </td>
                             </template>
-                        </v-data-table>
+                          </v-data-table>
+                        </div>
                     </v-card-title>
                 </v-card>
             </v-flex>
@@ -48,190 +63,63 @@
             </v-flex>
         </v-layout>
         <upload-dialog/>
+        <create-test-case-dialog/>
     </v-container>
 </template>
 
 <script>
 import UploadDialog from '../includes/dialog/UploadDialog'
+import CreateTestCaseDialog from '../includes/dialog/CreateTestCaseDialog'
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
-    UploadDialog
+    UploadDialog,
+    CreateTestCaseDialog
   },
   data: () => ({
       totalDesserts: 0,
-      desserts: [],
-      loading: true,
+      testCases: [
+        {
+          testCaseName: 'Test Case #1',
+          modules: '1',
+          passed: '100%',
+          failed: '0%',
+          skipped: '0%',
+          testCaseId: '1'
+        }
+      ],
+      loading: false,
       pagination: {},
       headers: [
-        {
-          text: 'Dessert (100g serving)',
-          align: 'center',
-          sortable: false,
-          value: 'name'
-        },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Execute', align:'center', value:'id', sortable: false}
-      ]
+        { text: 'Test Case Name', value: 'testCaseName' },
+        { text: 'Number of Modules', value: 'modules' },
+        { text: 'Passed', value: 'passed' },
+        { text: 'Failed', value: 'failed' },
+        { text: 'Skipped', value: 'skipped' },
+        { text: 'Actions', value: 'testCaseId', sortable: false }
+      ],
   }),
-  watch: {
-    pagination: {
-      handler () {
-        this.getDataFromApi()
-          .then(data => {
-            this.desserts = data.items
-            this.totalDesserts = data.total
-          })
-      },
-      deep: true
-    }
-  },
-  mounted () {
-    this.getDataFromApi()
-      .then(data => {
-        this.desserts = data.items
-        this.totalDesserts = data.total
-      })
+  mounted() {
+
   },
   methods: {
+    openCreateTestCaseDialog() {
+      this.$store.commit('dialog/showDialog', {dialog: "createTestCaseDialog"})
+    },
     openUploadDialog() {
       this.$store.commit('dialog/showDialog', {dialog: "uploadDialog"})
     },
-    getDataFromApi () {
-      this.loading = true
-      return new Promise((resolve, reject) => {
-        const { sortBy, descending, page, rowsPerPage } = this.pagination
+    getData() {
+      axios.post(this.baseUrl + 'api/testcase/getdata',{
+        id: this.$cookies.get('jts_token')
+      }).then((res)=> {
 
-        let items = this.getDesserts()
-        const total = items.length
-
-        if (this.pagination.sortBy) {
-          items = items.sort((a, b) => {
-            const sortA = a[sortBy]
-            const sortB = b[sortBy]
-
-            if (descending) {
-              if (sortA < sortB) return 1
-              if (sortA > sortB) return -1
-              return 0
-            } else {
-              if (sortA < sortB) return -1
-              if (sortA > sortB) return 1
-              return 0
-            }
-          })
-        }
-
-        if (rowsPerPage > 0) {
-          items = items.slice((page - 1) * rowsPerPage, page * rowsPerPage)
-        }
-
-        setTimeout(() => {
-          this.loading = false
-          resolve({
-            items,
-            total
-          })
-        }, 1000)
       })
-    },
-    getDesserts () {
-      return [
-        {
-          value: false,
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%'
-        },
-        {
-          value: false,
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%'
-        },
-        {
-          value: false,
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%'
-        },
-        {
-          value: false,
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%'
-        },
-        {
-          value: false,
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%'
-        },
-        {
-          value: false,
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%'
-        },
-        {
-          value: false,
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%'
-        },
-        {
-          value: false,
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: '45%'
-        },
-        {
-          value: false,
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: '22%'
-        },
-        {
-          value: false,
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%'
-        }
-      ]
     }
-  }
+  },
+  computed: mapGetters({
+    baseUrl: 'extras/baseUrl'
+  })
 }
 </script>

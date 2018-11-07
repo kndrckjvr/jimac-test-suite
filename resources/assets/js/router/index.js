@@ -4,6 +4,7 @@ import Home from '../components/Home'
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
 import Execute from '../components/Execute'
+import CreateTestCase from '../components/CreateTestCase'
 
 Vue.use(Router)
 
@@ -48,6 +49,14 @@ export default new Router({
       path: '/execute',
       name: 'Execute',
       component: Execute,
+      meta: {
+        auth: [1]
+      }
+    },
+    {
+      path: '/create',
+      name: 'Create Test Case',
+      component: CreateTestCase,
       meta: {
         auth: [1]
       }

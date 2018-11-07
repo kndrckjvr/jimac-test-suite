@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\User;
 
 class UserController extends Controller
@@ -31,7 +32,9 @@ class UserController extends Controller
             $user = User::where('email', $request->input("username"))->firstOrFail();
 
             if(password_verify($request->input("password"), $user->password)) {
-                return ["status"=>1, "auth"=>$user->auth];
+                $user->remember_token = $this->quickRandom();
+                $user->save();
+                return ["status"=>1, "auth"=>$user->auth, "token"=>$user->remember_token];
             } else {
                 return ["status"=>2, "error"=>"User not found!"];
             }
@@ -40,7 +43,9 @@ class UserController extends Controller
                 $user = User::where('username', $request->input("username"))->firstOrFail();
                 
                 if(password_verify($request->input("password"), $user->password)) {
-                    return ["status"=>1, "auth"=>$user->auth];
+                    $user->remember_token = $this->quickRandom();
+                    $user->save();
+                    return ["status"=>1, "auth"=>$user->auth, "token"=>$user->remember_token];
                 } else {
                     return ["status"=>2, "error"=>"User not found!"];
                 }
@@ -48,5 +53,11 @@ class UserController extends Controller
                 return ["status"=>2, "error"=>"User not found!"];
             }
         }
+    }
+
+    public static function quickRandom($length = 16) {
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
     }
 }

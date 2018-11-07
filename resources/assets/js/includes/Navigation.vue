@@ -56,6 +56,7 @@ export default {
         logout() {
             this.$store.commit('auth/changeAuth', {auth: 0});
             this.$cookies.set('auth', 0)
+            this.$cookies.remove('jts_token')
             this.$router.push('/login')
         },
         listItemClick(e) {

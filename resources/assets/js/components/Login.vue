@@ -71,6 +71,7 @@ export default {
                 this.loading = false
                 if(res.data.status == 1) {
                     this.$cookies.set('auth', res.data.auth)
+                    this.$cookies.set('jts_token', res.data.token)
                     this.$store.commit('auth/changeAuth', {auth:res.data.auth})
                     this.$router.push('/dashboard')
                     return
