@@ -77,7 +77,11 @@ export default {
                 } else if(res.data.status == 2) {
                     this.usernameError = ' '
                     this.passwordError = ' '
-                    this.$store.commit('snackbar/showSnack', {"text":res.data.error, "icon":"warning", "color":"red"})
+                    this.$store.commit('snackbar/showSnack', {
+                        "text":res.data.error, 
+                        "icon":"warning", 
+                        "color":"red"
+                    })
                 }
                 for(var key in res.data.errors) {
                     switch(key) {
@@ -91,7 +95,11 @@ export default {
                 }
             }).catch((e) => {
                 this.loading = false
-                this.$store.commit('snackbar/showSnack', {"text":"Internal Server Error!", "icon":"warning", "color":"red"})
+                this.$store.commit('snackbar/showSnack', {
+                    "text":"Internal Server Error!", 
+                    "icon":"warning", 
+                    "color":"red"
+                })
             })
         }
     },

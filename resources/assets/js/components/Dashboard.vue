@@ -1,40 +1,40 @@
 <template>
-    <v-container fluid grid-list-md>
+  <v-container fluid grid-list-md>
+    <v-card>
+      <v-flex class="px-4 pb-4 pt-2">    
+        <v-card-title primary-title class="pb-0 mb-0">
+        <div class="full-width">
+            <h2 class="headline mb-0">Dashboard</h2>
+        </div>
+        </v-card-title>
+      </v-flex>
+    </v-card>
+
+    <v-layout row wrap class="pt-2">
+      <v-flex xs6 class="">
         <v-card>
-            <v-flex class="px-4 pb-4 pt-2">    
-                <v-card-title primary-title class="pb-0 mb-0">
-                <div class="full-width">
-                    <h2 class="headline mb-0">Dashboard</h2>
-                </div>
-                </v-card-title>
-            </v-flex>
+          <v-card-title primary-title class="pb-0 mb-0">
+            <div class="full-width">
+                <h3 class="headline mb-0">Testings</h3>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+
+          </v-card-actions>
         </v-card>
+      </v-flex>
+        <v-flex xs6 class="">
+          <v-card>
+            <v-card-title primary-title class="pb-0 mb-0">
+              <div class="full-width">
+                  <h3 class="headline mb-0">Testings</h3>
+              </div>
+            </v-card-title>
+            <v-card-actions>
 
-        <v-layout row wrap class="pt-2">
-            <v-flex xs6 class="">
-                <v-card>
-                    <v-card-title primary-title class="pb-0 mb-0">
-                        <div class="full-width">
-                            <h3 class="headline mb-0">Testings</h3>
-                        </div>
-                    </v-card-title>
-                    <v-card-actions>
-
-                    </v-card-actions>
-                </v-card>
-            </v-flex>
-            <v-flex xs6 class="">
-                <v-card>
-                    <v-card-title primary-title class="pb-0 mb-0">
-                        <div class="full-width">
-                            <h3 class="headline mb-0">Testings</h3>
-                        </div>
-                    </v-card-title>
-                    <v-card-actions>
-
-                    </v-card-actions>
-                </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+    </v-layout>
+  </v-container>
 </template>
