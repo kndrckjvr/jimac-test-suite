@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '../components/Home'
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
-import Execute from '../components/Execute'
+import TestCaseMaintenance from '../components/TestCaseMaintenance'
 import ModuleMaintenance from '../components/ModuleMaintenance'
 
 Vue.use(Router)
@@ -46,9 +46,9 @@ export default new Router({
       }
     },
     {
-      path: '/execute',
-      name: 'Execute',
-      component: Execute,
+      path: '/testcase',
+      name: 'Test Case Maintenance',
+      component: TestCaseMaintenance,
       meta: {
         auth: [1]
       }

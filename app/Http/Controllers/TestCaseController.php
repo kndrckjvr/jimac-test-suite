@@ -53,9 +53,9 @@ class TestCaseController extends Controller
             $data["value"] = false;
             $data["testCaseName"] = $testcase->test_case_name;
             $data["modules"] = Module::where('test_case_id', $testcase->id)->count();
-            $data["passed"] = app('App\Http\Controllers\ModuleController')->getPassed($testcase->id);
-            $data["failed"] = app('App\Http\Controllers\ModuleController')->getFailed($testcase->id);
-            $data["skipped"] = app('App\Http\Controllers\ModuleController')->getSkipped($testcase->id);
+            $data["passed"] = number_format((float)app('App\Http\Controllers\ModuleController')->getPassed($testcase->id)*100, 2, '.', '');
+            $data["failed"] = number_format((float)app('App\Http\Controllers\ModuleController')->getFailed($testcase->id)*100, 2, '.', '');
+            $data["skipped"] = number_format((float)app('App\Http\Controllers\ModuleController')->getSkipped($testcase->id)*100, 2, '.', '');
             $data["createdBy"] = $testcase->created_at;
             $data["testCaseId"] = $testcase->id;
             array_push($api_data, $data);

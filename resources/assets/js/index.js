@@ -23,11 +23,8 @@ router.beforeEach((to, from, next) => {
         if(!VueCookies.isKey('testCaseId') && to.name == "Module Maintenance") {
             next('/dashboard')
             return
-        } else if(to.name == "Module Maintenance") {
-            store.commit('extras/setToolbarTitle', {name:VueCookies.get('testCaseId')})
-        } else {
-            store.commit('extras/setToolbarTitle', {name:to.name})
         }
+        store.commit('extras/setToolbarTitle', {name:to.name})
         next()
     } else {
         if(checkAuth(VueCookies.get('auth'), [-1, 1, 2, 3, 4])) {

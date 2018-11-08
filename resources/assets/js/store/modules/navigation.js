@@ -8,9 +8,9 @@ export const state = {
             auth: [1, 2]
         },
         {
-            title: 'Execute Tests',
+            title: 'Test Case Maintenance',
             icon: 'build',
-            to: '/execute',
+            to: '/testcase',
             auth: [1, 2]
         },
         {

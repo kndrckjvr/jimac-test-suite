@@ -27,3 +27,4 @@ Route::post('/testcase/create', 'TestCaseController@createTestCase');
 
 // Module
 Route::post('/module/getlatestid', 'ModuleController@getLatestId');
+Route::post('/module/getdata', 'ModuleController@getData');

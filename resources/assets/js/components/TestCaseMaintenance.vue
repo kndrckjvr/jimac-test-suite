@@ -198,6 +198,7 @@ export default {
       this.getData()
     },
     getData() {
+      this.testCases = []
       axios.post(this.baseUrl + 'api/testcase/getdata',{
         id: this.$cookies.get('jts_token')
       }).then((res)=> {

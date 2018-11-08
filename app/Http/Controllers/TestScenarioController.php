@@ -21,7 +21,8 @@ class TestScenarioController extends Controller
             return 0;
         }
         $total = TestScenario::where('module_id', $moduleId)->count();
-        return ($result / $total) * 100;
+        if($total <= 0) return 0;
+        return ($result / $total);
     }
 
     public function getFailed($moduleId) {
@@ -37,7 +38,8 @@ class TestScenarioController extends Controller
             return 0;
         }
         $total = TestScenario::where('module_id', $moduleId)->count();
-        return ($result / $total) * 100;
+        if($total <= 0) return 0;
+        return ($result / $total);
     }
 
     public function getSkipped($moduleId) {
@@ -53,6 +55,7 @@ class TestScenarioController extends Controller
             return 0;
         }
         $total = TestScenario::where('module_id', $moduleId)->count();
-        return ($result / $total) * 100;
+        if($total <= 0) return 0;
+        return ($result / $total);
     }
 }

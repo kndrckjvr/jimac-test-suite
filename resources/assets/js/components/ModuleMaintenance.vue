@@ -4,15 +4,61 @@
       <v-flex md12>
         <v-card>
           <v-toolbar dark card color="primary">
-            <v-toolbar-title>Modules</v-toolbar-title>
+            <v-toolbar-title>{{ $cookies.get('testCaseId') }} - Modules</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon color="primary" :loading="loading" @click="refresh()" class="mb-2"><v-icon>refresh</v-icon></v-btn>
           </v-toolbar>
           <v-card-title>
             <div class="full-width">
               <v-toolbar flat color="white">
-                <v-btn icon color="primary" :loading="loading" @click="refreshModule()" class="mb-2"><v-icon>refresh</v-icon></v-btn>
-                <v-btn icon color="primary" :loading="loading" @click="createModule()" class="mb-2"><v-icon>add</v-icon></v-btn>
-                <v-btn icon color="primary" :loading="loading" @click="editModule()" class="mb-2"><v-icon>edit</v-icon></v-btn>
-                <v-btn icon color="primary" :loading="loading" @click="deteleModule()" class="mb-2"><v-icon>delete_forever</v-icon></v-btn>
+                <v-tooltip bottom>
+                  <v-btn 
+                    icon 
+                    slot="activator"
+                    color="primary" 
+                    :disabled="loading" 
+                    @click="openCreateTestCaseDialog()" 
+                    class="mb-2">
+                    <v-icon>add</v-icon>
+                  </v-btn>
+                  <span>Create Module</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <v-btn 
+                    icon 
+                    slot="activator"
+                    color="primary" 
+                    :disabled="loading" 
+                    @click="editTestCase()" 
+                    class="mb-2">
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                  <span>Edit Module</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <v-btn 
+                    icon 
+                    slot="activator"
+                    color="primary" 
+                    :disabled="loading" 
+                    @click="deleteTestCase()" 
+                    class="mb-2">
+                    <v-icon>delete_forever</v-icon>
+                  </v-btn>
+                  <span>Delete Module</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <v-btn 
+                    icon 
+                    slot="activator"
+                    color="primary" 
+                    :disabled="loading" 
+                    @click="openTestCase()" 
+                    class="mb-2">
+                    <v-icon>arrow_forward</v-icon>
+                  </v-btn>
+                  <span>Open Module</span>
+                </v-tooltip>
                 <v-spacer></v-spacer>
                 <v-text-field
                   v-model="search"
@@ -103,10 +149,10 @@ export default {
     selected: []
   }),
   mounted() {
-    this.$store.commit('extras/setToolbarTitle', {name:this.$cookies.get('testCaseId')})
     axios.post(this.baseUrl + 'api/module/getlatestid', {
       testCaseId: this.testCaseId
     }).then((res) => {
+      this.modules = res.data.modules
       this.$store.dispatch('module/moduleName', {moduleName:this.moduleName + res.data.moduleName})
     }).catch((e) => {
       this.$store.commit('snackbar/showSnack', {
@@ -159,6 +205,7 @@ export default {
     }
   },
   computed: mapGetters({
+    baseUrl: 'extras/baseUrl',
     testCaseId: 'testCase/testCaseId',
     moduleName: 'module/moduleName'
   })
