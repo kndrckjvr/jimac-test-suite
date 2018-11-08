@@ -23710,7 +23710,7 @@ if (!__WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.isKey("auth")) {
 }
 __WEBPACK_IMPORTED_MODULE_3__router__["a" /* default */].beforeEach(function (to, from, next) {
     if (Object(__WEBPACK_IMPORTED_MODULE_6__utils_authHas__["a" /* default */])(to.meta.auth, __WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.get('auth'), -1)) {
-        if (!__WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.isKey('testCaseId') && to.name == "Module Maintenance") {
+        if (!__WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.isKey('testCaseTitle') && to.name == "Module Maintenance") {
             next('/dashboard');
             return;
         }
@@ -75377,7 +75377,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -75457,7 +75457,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).then(function (res) {
         _this.loading = false;
         if (res.data.status) {
-          _this.$cookies.set('testCaseId', _this.testCaseTitle);
+          _this.$cookies.set('testCaseTitle', _this.testCaseTitle);
+          _this.$cookies.set('testCaseId', res.data.testCaseId);
           _this.closeCreateTestCaseDialog();
           _this.$store.commit('testCase/setTestCaseTitle', { title: _this.testCaseTitle });
           _this.$store.commit('testCase/setTestCaseId', { testCaseId: res.data.testCaseId });
@@ -76897,7 +76898,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77045,7 +77046,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loading: false,
+      loading: true,
       pagination: {
         sortBy: 'moduleName'
       },
@@ -77074,15 +77075,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   beforeDestroy: function beforeDestroy() {
     this.$cookies.remove('testCaseId');
+    this.$cookies.remove('testCaseTitle');
   },
 
   methods: {
     getData: function getData() {
       var _this2 = this;
 
+      this.loading = true;
       axios.post(this.baseUrl + 'api/module/getdata', {
         id: this.$cookies.get('jts_token'),
-        testCaseId: this.testCaseId
+        testCaseId: this.$cookies.get('testCaseId')
       }).then(function (res) {
         _this2.loading = false;
         if (res.data.status) {
@@ -77450,7 +77453,7 @@ var render = function() {
                                         _c("td", [
                                           _c("strong", [
                                             _vm._v(
-                                              _vm._s(props.item.testCaseName)
+                                              _vm._s(props.item.moduleName)
                                             )
                                           ])
                                         ]),
@@ -77458,7 +77461,7 @@ var render = function() {
                                         _c(
                                           "td",
                                           { staticClass: "text-xs-center" },
-                                          [_vm._v(_vm._s(props.item.modules))]
+                                          [_vm._v(_vm._s(props.item.scenarios))]
                                         ),
                                         _vm._v(" "),
                                         _c(

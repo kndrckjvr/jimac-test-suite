@@ -110,8 +110,8 @@
                         hide-details
                       ></v-checkbox>
                     </td>
-                    <td><strong>{{ props.item.testCaseName }}</strong></td>
-                    <td class="text-xs-center">{{ props.item.modules }}</td>
+                    <td><strong>{{ props.item.moduleName }}</strong></td>
+                    <td class="text-xs-center">{{ props.item.scenarios }}</td>
                     <td class="text-xs-center">{{ props.item.passed }}%</td>
                     <td class="text-xs-center">{{ props.item.failed }}%</td>
                     <td class="text-xs-center">{{ props.item.skipped }}%</td>
@@ -133,7 +133,7 @@
 import {mapGetters} from 'vuex';
 export default {
   data: () => ({
-    loading: false,
+    loading: true,
     pagination: {
       sortBy: 'moduleName'
     },
@@ -165,12 +165,14 @@ export default {
   },
   beforeDestroy() {
     this.$cookies.remove('testCaseId')
+    this.$cookies.remove('testCaseTitle')
   },
   methods: {
     getData() {
+      this.loading = true
       axios.post(this.baseUrl + 'api/module/getdata',{
         id: this.$cookies.get('jts_token'),
-        testCaseId: this.testCaseId
+        testCaseId: this.$cookies.get('testCaseId')
       }).then((res)=> {
         this.loading = false
         if(res.data.status) {

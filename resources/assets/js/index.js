@@ -20,7 +20,7 @@ if(!VueCookies.isKey("auth")) {
 }
 router.beforeEach((to, from, next) => {
     if(checkAuth(to.meta.auth, VueCookies.get('auth'), -1)) {
-        if(!VueCookies.isKey('testCaseId') && to.name == "Module Maintenance") {
+        if(!VueCookies.isKey('testCaseTitle') && to.name == "Module Maintenance") {
             next('/dashboard')
             return
         }

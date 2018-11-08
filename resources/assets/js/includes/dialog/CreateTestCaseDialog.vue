@@ -62,7 +62,8 @@ export default {
       }).then((res) => {
         this.loading = false
         if(res.data.status) {
-          this.$cookies.set('testCaseId', this.testCaseTitle)
+          this.$cookies.set('testCaseTitle', this.testCaseTitle)
+          this.$cookies.set('testCaseId', res.data.testCaseId)
           this.closeCreateTestCaseDialog()
           this.$store.commit('testCase/setTestCaseTitle', {title: this.testCaseTitle})
           this.$store.commit('testCase/setTestCaseId', {testCaseId: res.data.testCaseId})
