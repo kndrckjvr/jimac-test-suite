@@ -12,25 +12,33 @@
             <v-icon>close</v-icon>
         </v-btn>
       </v-toolbar>
-        <v-card-title class="pb-0 mb-0">
-          <v-form class="full-width">
-            <v-container fluid grid-list-md>
-              <v-layout>
-                <v-text-field
-                  label="Test Case Title"
-                  v-model="testCaseTitle" />
-              </v-layout>
-            </v-container>
-          </v-form>
-        </v-card-title>
-        <v-card-actions>
-          <v-btn
-            color="primary"
-            class="full-width"
-            @click="saveTestCaseName()" >
-            Save
-          </v-btn>
-        </v-card-actions>
+      <v-progress-linear 
+        :indeterminate="true"
+        height="3"
+        class="ma-0"
+        color="secondary lighten-1"
+        :active="loading" />
+      <v-card-title class="pb-0 mb-0">
+        <v-form class="full-width">
+          <v-container fluid grid-list-md>
+            <v-layout>
+              <v-text-field
+                label="Test Case Title"
+                :disabled="loading"
+                v-model="$store.state.testCase.test_case_title" />
+            </v-layout>
+          </v-container>
+        </v-form>
+      </v-card-title>
+      <v-card-actions>
+        <v-btn
+          color="primary"
+          class="full-width"
+          :loading="loading"
+          @click="saveTestCaseName()" >
+          Save
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -38,31 +46,48 @@
 <script>
 import {mapGetters} from 'vuex'
 export default {
-  name: 'CreateTestCaseDialog',
+  name: 'CreateTestCaseDialog', 
   data: () => ({
-    testCaseTitle: 'Test Case #'
+    loading: false
   }),
-  mounted() {
-    axios.post(this.baseUrl+'api/testcase/getlatestid', {
-      id: this.$cookies.get('jts_token')
-    }).then((res) => {
-      this.testCaseTitle = this.testCaseTitle + res.data.testCaseId
-    })
-  },
   methods: {
     closeCreateTestCaseDialog() {
       this.$store.commit('dialog/closeDialog', {dialog: "createTestCaseDialog"})
     },
     saveTestCaseName() {
-      this.$cookies.set('testCaseId', this.testCaseTitle)
-      this.closeCreateTestCaseDialog()
-      this.$store.commit('extras/setTestCaseTitle', {title: this.testCaseTitle})
-      this.$router.push('/create')
+      this.loading = true
+      axios.post(this.baseUrl+'api/testcase/create',{
+        testCaseTitle: this.testCaseTitle,
+        id: this.$cookies.get('jts_token')
+      }).then((res) => {
+        this.loading = false
+        if(res.data.status) {
+          this.$cookies.set('testCaseId', this.testCaseTitle)
+          this.closeCreateTestCaseDialog()
+          this.$store.commit('testCase/setTestCaseTitle', {title: this.testCaseTitle})
+          this.$store.commit('testCase/setTestCaseId', {testCaseId: res.data.testCaseId})
+          this.$router.push('/module')
+        } else {
+          this.$store.commit('snackbar/showSnack', {
+                    "text":"Http Error!", 
+                    "icon":"warning", 
+                    "color":"red"
+                })
+        }
+      }).catch((e) => {
+        this.loading = false
+        this.$store.commit('snackbar/showSnack', {
+                    "text":"Internal Server Error!", 
+                    "icon":"warning", 
+                    "color":"red"
+                })
+      })
     }
   },
   computed: mapGetters({
     show: 'dialog/createTestCaseDialog',
-    baseUrl: 'extras/baseUrl'
+    baseUrl: 'extras/baseUrl',
+    testCaseTitle: 'testCase/test_case_title'
   })
 }
 </script>

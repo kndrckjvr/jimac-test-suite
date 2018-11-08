@@ -22,3 +22,8 @@ Route::post('/user/login', 'UserController@loginUser');
 
 //Test Case
 Route::post('/testcase/getlatestid', 'TestCaseController@getLatestId');
+Route::post('/testcase/getdata', 'TestCaseController@getData');
+Route::post('/testcase/create', 'TestCaseController@createTestCase');
+
+// Module
+Route::post('/module/getlatestid', 'ModuleController@getLatestId');

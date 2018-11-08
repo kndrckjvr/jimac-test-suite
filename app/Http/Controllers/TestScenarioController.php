@@ -11,11 +11,14 @@ class TestScenarioController extends Controller
     public function getPassed($moduleId) {
         $result = 0;
         foreach(
-        TestScenario::whereColumn([
+        TestScenario::where([
             ['module_id', '=', $moduleId],
-            ['status', '=', '1']
+            ['status', '=', 1]
             ])->cursor() as $scenario) {
                 $result = $result + 1;
+        }
+        if($result <= 0) {
+            return 0;
         }
         $total = TestScenario::where('module_id', $moduleId)->count();
         return ($result / $total) * 100;
@@ -24,11 +27,14 @@ class TestScenarioController extends Controller
     public function getFailed($moduleId) {
         $result = 0;
         foreach(
-        TestScenario::whereColumn([
+        TestScenario::where([
             ['module_id', '=', $moduleId],
-            ['status', '=', '0']
+            ['status', '=', 0]
             ])->cursor() as $scenario) {
                 $result = $result + 1;
+        }
+        if($result <= 0) {
+            return 0;
         }
         $total = TestScenario::where('module_id', $moduleId)->count();
         return ($result / $total) * 100;
@@ -37,11 +43,14 @@ class TestScenarioController extends Controller
     public function getSkipped($moduleId) {
         $result = 0;
         foreach(
-        TestScenario::whereColumn([
+        TestScenario::where([
             ['module_id', '=', $moduleId],
-            ['status', '=', '2']
+            ['status', '=', 2]
             ])->cursor() as $scenario) {
                 $result = $result + 1;
+        }
+        if($result <= 0) {
+            return 0;
         }
         $total = TestScenario::where('module_id', $moduleId)->count();
         return ($result / $total) * 100;
