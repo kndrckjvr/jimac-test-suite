@@ -46,6 +46,13 @@ class TestCaseController extends Controller
                             "testCaseId" => $testcase->id]);
     }
 
+    public function deleteTestCase(Request $request) {
+        foreach($request->input('testCaseId') as $id) {
+            TestCase::where('id', $id)->delete();
+        }
+        return response()->json(["status"=>1]);
+    }
+
     public function getData(Request $request) {
         $user = User::where('remember_token', $request->input('id'))->get();
         $api_data = array();
@@ -60,19 +67,18 @@ class TestCaseController extends Controller
             $data["testCaseId"] = $testcase->id;
             array_push($api_data, $data);
         }
-        
-        $test_case_count = TestCase::where('user_id',$user[0]->id)->count() + 1;
 
+        $testcaseid = DB::table('test_cases')->orderBy('id', 'DESC')->first() == null ?
+            1 : DB::table('test_cases')->orderBy('id', 'DESC')->first()->id + 1;
         return response()->json([
                             "status" => 1,
                             "testCases" => $api_data,
-                            "testCaseId" => $test_case_count]);
+                            "testCaseId" => $testcaseid]);
     }
 
     public function getLatestId(Request $request) {
-        $user = User::where('remember_token', $request->input('id'))->get();
-        $test_case_count = TestCase::where('user_id',$user[0]->id)->count() + 1;
-
-        return response()->json(["testCaseId" => $test_case_count]);
+        $testcaseid = DB::table('test_cases')->orderBy('id', 'DESC')->first() == null ?
+            1 : DB::table('test_cases')->orderBy('id', 'DESC')->first()->id + 1;
+        return response()->json(["testCaseId" => $testcaseid]);
     }
 }

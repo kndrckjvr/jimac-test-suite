@@ -24,6 +24,7 @@
             <v-layout>
               <v-text-field
                 label="Test Case Title"
+                :error-messages="testCaseTitleError" 
                 :disabled="loading"
                 v-model="$store.state.testCase.test_case_title" />
             </v-layout>
@@ -48,7 +49,8 @@ import {mapGetters} from 'vuex'
 export default {
   name: 'CreateTestCaseDialog', 
   data: () => ({
-    loading: false
+    loading: false,
+    testCaseTitleError: []
   }),
   methods: {
     closeCreateTestCaseDialog() {
@@ -56,6 +58,7 @@ export default {
     },
     saveTestCaseName() {
       this.loading = true
+      this.testCaseTitleError = []
       axios.post(this.baseUrl+'api/testcase/create',{
         testCaseTitle: this.testCaseTitle,
         id: this.$cookies.get('jts_token')
@@ -68,6 +71,8 @@ export default {
           this.$store.commit('testCase/setTestCaseTitle', {title: this.testCaseTitle})
           this.$store.commit('testCase/setTestCaseId', {testCaseId: res.data.testCaseId})
           this.$router.push('/module')
+        } else if(res.data.status == 0) {
+          this.testCaseTitleError = res.data.error
         } else {
           this.$store.commit('snackbar/showSnack', {
                     "text":"Http Error!", 

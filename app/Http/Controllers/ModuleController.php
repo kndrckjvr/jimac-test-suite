@@ -25,8 +25,10 @@ class ModuleController extends Controller
     }
 
     public function getLatestId(Request $request) {
-        $module_count = Module::where('test_case_id', $request->input('testCaseId'))->count() + 1;
-        return response()->json(["moduleId"=>$module_count]);
+        if(DB::table('modules')->orderBy('id', 'DESC')->first() != null)
+            return response()->json(["moduleId"=>DB::table('modules')->orderBy('id', 'DESC')->first()->id + 1]);
+        else
+            return response()->json(["moduleId"=>1]);
     }
 
     public function getPassed($testCaseId) { 

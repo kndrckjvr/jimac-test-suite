@@ -8,7 +8,7 @@
         <v-icon>insert_drive_file</v-icon>
         <v-toolbar-title>Create Module</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="closeCreateTestCaseDialog()">
+        <v-btn icon @click="closeDialog()">
             <v-icon>close</v-icon>
         </v-btn>
       </v-toolbar>
@@ -46,18 +46,34 @@
 <script>
 import {mapGetters} from 'vuex';
 export default {
+  name: 'CreateModuleDialog',
   data: () => ({
     loading: false
   }),
   methods: {
+    closeDialog() {
+      this.$store.commit('dialog/closeDialog', {dialog:"createModuleDialog"})
+    },
     saveModuleName() {
+      this.loading = true
       axios.post(this.baseUrl + 'api/module/getlastestid',{
         testCaseId: this.testCaseId,
         moduleName: this.moduleName
+      }).then((res) => {
+        this.loading = false
+        
+      }).catch((e) => {
+        this.loading = false
+        this.$store.commit('snackbar/showSnack', {
+                    "text":"Internal Server Error!", 
+                    "icon":"warning", 
+                    "color":"red"
+                })
       })
     }
   },
   computed: mapGetters({
+    show: 'dialog/createModuleDialog',
     baseUrl: 'extras/baseUrl',
     moduleName: 'module/moduleName',
     testCaseId: 'testCase/testCaseId'

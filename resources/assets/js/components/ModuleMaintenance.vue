@@ -4,7 +4,7 @@
       <v-flex md12>
         <v-card>
           <v-toolbar dark card color="primary">
-            <v-toolbar-title>{{ $cookies.get('testCaseId') }} - Modules</v-toolbar-title>
+            <v-toolbar-title>{{ $cookies.get('testCaseTitle') }} - Modules</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon color="primary" :loading="loading" @click="refresh()" class="mb-2"><v-icon>refresh</v-icon></v-btn>
           </v-toolbar>
@@ -17,7 +17,7 @@
                     slot="activator"
                     color="primary" 
                     :disabled="loading" 
-                    @click="openCreateTestCaseDialog()" 
+                    @click="openCreateModuleDialog()" 
                     class="mb-2">
                     <v-icon>add</v-icon>
                   </v-btn>
@@ -86,15 +86,13 @@
                         :indeterminate="props.indeterminate"
                         primary
                         hide-details
-                        @click.native="toggleAll"
-                      ></v-checkbox>
+                        @click.native="toggleAll" />
                     </th>
                     <th
                       v-for="header in props.headers"
                       :key="header.text"
                       :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                      @click="changeSort(header.value)"
-                    >
+                      @click="changeSort(header.value)" >
                       <v-icon small>arrow_upward</v-icon>
                       {{ header.text }}
                     </th>
@@ -126,12 +124,31 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <v-tooltip left>
+      <v-btn
+        color="primary"
+        dark
+        fixed
+        bottom
+        slot="activator"
+        right
+        fab
+        to="/testcase" >
+        <v-icon>build</v-icon>
+      </v-btn>
+      <span>Back to Test Case Maintenance</span>
+    </v-tooltip>
+    <create-module-dialog></create-module-dialog>
   </v-container>
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
+import CreateModuleDialog from '../includes/dialog/CreateModuleDialog';
 export default {
+  components: {
+    CreateModuleDialog
+  },
   data: () => ({
     loading: true,
     pagination: {
@@ -152,8 +169,7 @@ export default {
     axios.post(this.baseUrl + 'api/module/getlatestid', {
       testCaseId: this.testCaseId
     }).then((res) => {
-      this.modules = res.data.modules
-      this.$store.dispatch('module/moduleName', {moduleName:this.moduleName + res.data.moduleName})
+      this.$store.commit('module/setModuleName', {moduleName:this.moduleName + res.data.moduleId})
     }).catch((e) => {
       this.$store.commit('snackbar/showSnack', {
                     "text":"Internal Server Error!", 
@@ -168,8 +184,15 @@ export default {
     this.$cookies.remove('testCaseTitle')
   },
   methods: {
+    openCreateModuleDialog() {
+      this.$store.commit('dialog/showDialog', {dialog:"createModuleDialog"})
+    },
+    refresh() {
+      this.getData()
+    },
     getData() {
       this.loading = true
+      this.modules = []
       axios.post(this.baseUrl + 'api/module/getdata',{
         id: this.$cookies.get('jts_token'),
         testCaseId: this.$cookies.get('testCaseId')
@@ -195,7 +218,7 @@ export default {
     },
     toggleAll () {
       if (this.selected.length) this.selected = []
-      else this.selected = this.testCases.slice()
+      else this.selected = this.modules.slice()
     },
     changeSort (column) {
       if (this.pagination.sortBy === column) {

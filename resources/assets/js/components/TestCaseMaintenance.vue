@@ -1,4 +1,4 @@
-<template>
+<template ref="testcasemaintenance">
     <v-container fluid grid-list-md>
         <v-layout>
             <v-flex md8>
@@ -58,7 +58,7 @@
                                 class="mb-2">
                                 <v-icon>arrow_forward</v-icon>
                               </v-btn>
-                              <span>Open Test Case</span>
+                              <span>Execute Test Case</span>
                             </v-tooltip>
                             <v-spacer></v-spacer>
                             <v-text-field
@@ -144,18 +144,21 @@
         </v-layout>
         <upload-dialog/>
         <create-test-case-dialog/>
+        <delete-test-case-dialog/>
     </v-container>
 </template>
 
 <script>
 import UploadDialog from '../includes/dialog/UploadDialog'
 import CreateTestCaseDialog from '../includes/dialog/CreateTestCaseDialog'
+import DeleteTestCaseDialog from '../includes/dialog/DeleteTestCaseDialog'
 import { mapGetters } from 'vuex';
 
 export default {
   components: {
     UploadDialog,
-    CreateTestCaseDialog
+    CreateTestCaseDialog,
+    DeleteTestCaseDialog
   },
   data: () => ({
       pagination: {
@@ -178,6 +181,12 @@ export default {
   mounted() {
     this.getData()
   },
+  watch: {
+    storeTestCases(newTestCases, oldTestCases) {
+      if(newTestCases.length == 0)
+        this.getData()
+    }
+  },
   methods: {
     openCreateTestCaseDialog() {
       this.$store.commit('dialog/showDialog', {dialog: "createTestCaseDialog"})
@@ -187,17 +196,43 @@ export default {
     },
     editTestCase() {
       if(this.selected.length < 1) {
+        this.$store.commit('snackbar/showSnack', {
+                  "text":"No Test Cases Selected", 
+                  "icon":"warning", 
+                  "color":"red"
+              })
+        return
+      }
+
+      if(this.selected.length > 1) {
         //multiple edit
       } else {
-        this.$store.commit('testCase/setTestCase', {'testCase':this.selected[0]})
-        console.log(this.selected[0])
+        this.$store.commit('testCase/setTestCaseTitle', {'testCase':this.selected[0].testCaseName})
+        this.$store.commit('testCase/setTestCaseId', {'testCase':this.selected[0].testCaseId})
+        
+        this.$cookies.set('testCaseTitle', this.selected[0].testCaseName)
+        this.$cookies.set('testCaseId', this.selected[0].testCaseId)
+
+        this.$router.push('/module')
       }
     },
+    deleteTestCase() {
+      if(this.selected.length < 1) {
+        this.$store.commit('snackbar/showSnack', {
+                  "text":"No Test Cases Selected", 
+                  "icon":"warning", 
+                  "color":"red"
+              })
+        return
+      }
+      this.$store.commit('testCase/setTestCase', {testCase: this.selected})
+      this.$store.commit('dialog/showDialog', {dialog: "deleteTestCaseDialog"})
+    },
     refresh() {
-      this.loading = true
       this.getData()
     },
     getData() {
+      this.loading = true
       this.testCases = []
       axios.post(this.baseUrl + 'api/testcase/getdata',{
         id: this.$cookies.get('jts_token')
@@ -236,7 +271,8 @@ export default {
     }
   },
   computed: mapGetters({
-    baseUrl: 'extras/baseUrl'
+    baseUrl: 'extras/baseUrl',
+    storeTestCases: 'testCase/testCase'
   })
 }
 </script>
