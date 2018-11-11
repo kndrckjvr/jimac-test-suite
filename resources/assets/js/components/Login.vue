@@ -70,18 +70,17 @@ export default {
             }).then((res) => {
                 this.loading = false
                 if(res.data.status == 1) {
-                    this.$cookies.set('auth', res.data.auth)
-                    this.$cookies.set('jts_token', res.data.token)
-                    this.$store.commit('auth/changeAuth', {auth:res.data.auth})
+                    // set token
+                    this.$cookies.set('token', res.data.user.token)
+                    // set user
+                    this.$store.commit('auth/setUser', { user : res.data.user })
                     this.$router.push('/dashboard')
                     return
                 } else if(res.data.status == 2) {
-                    this.usernameError = ' '
-                    this.passwordError = ' '
                     this.$store.commit('snackbar/showSnack', {
-                        "text":res.data.error, 
-                        "icon":"warning", 
-                        "color":"red"
+                        "text" : res.data.message, 
+                        "icon" : "warning", 
+                        "color" : "red"
                     })
                 }
                 for(var key in res.data.errors) {

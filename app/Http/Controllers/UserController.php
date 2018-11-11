@@ -15,42 +15,146 @@ class UserController extends Controller
         
     }
 
+    public function createTestUser() {
+        $data = array(
+            'sqa' => array(
+                'name' => 'Ken Cosca (SQA)',
+                'username' => 'sqa',
+                'email' => 'kendrickjaviercosca@gmail.com',
+                'password' => password_hash('123', PASSWORD_DEFAULT),
+                'status' => 1,
+                'auth' => 1,
+                'remember_token' => ''
+            ),
+            'pl' => array(
+                'name' => 'Ken Cosca (Project Leader)',
+                'username' => 'pl',
+                'email' => 'witwiw0034@gmail.com',
+                'password' => password_hash('123', PASSWORD_DEFAULT),
+                'status' => 1,
+                'auth' => 2,
+                'remember_token' => ''
+            ),
+            'pm' => array(
+                'name' => 'Ken Cosca (Project Manager)',
+                'username' => 'pm',
+                'email' => 'royalhmtaxi@gmail.com',
+                'password' => password_hash('123', PASSWORD_DEFAULT),
+                'status' => 1,
+                'auth' => 3,
+                'remember_token' => ''
+            ),
+            'su' => array(
+                'name' => 'Ken Cosca (Admin)',
+                'username' => 'su',
+                'email' => 'kendrickandrewjavier@gmail.com',
+                'password' => password_hash('123', PASSWORD_DEFAULT),
+                'status' => 1,
+                'auth' => 4,
+                'remember_token' => ''
+            )
+        );
+        foreach($data as $value) {
+            $user = new User;
+            $user->name = $value['name'];
+            $user->username = $value['username'];
+            $user->email = $value['email'];
+            $user->password = $value['password'];
+            $user->status = $value['status'];
+            $user->auth = $value['auth'];
+            $user->remember_token = $value['remember_token'];
+            $user->save();
+        }
+
+        return 'Users has been added!';
+    }
+
     public function loginUser(Request $request) {
         $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required'
         ]);
 
-        $names = array('username'=>"Username",
-            'password'=>"Password");
+        $names = array('username'=>'Username',
+            'password'=>'Password');
 
         $validator->setAttributeNames($names);
 
-        if($validator->fails()) return response()->json(["status"=>0,"errors"=>$validator->errors()]);
+        if($validator->fails()) 
+            return response()->json([
+                'status' => 0,
+                'errors' => $validator->errors()
+            ]);
 
         try {
-            $user = User::where('email', $request->input("username"))->firstOrFail();
+            $user = User::where('email', $request->input('username'))->firstOrFail();
 
-            if(password_verify($request->input("password"), $user->password)) {
+            if(password_verify($request->input('password'), $user->password)) {
                 $user->remember_token = $this->quickRandom();
                 $user->save();
-                return ["status"=>1, "auth"=>$user->auth, "token"=>$user->remember_token];
+
+                if($user->status) {
+                    $responsedata = array('name' => $user->name,
+                        'token' => $user->remember_token,
+                        'auth' => $user->auth,
+                        'image' => 'http://jimac-test-suite.test/public/images/default.png'
+                    );
+
+                    return response()->json([
+                        'status' => 1,
+                        'user' => $responsedata
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 2, 
+                        'message' => 'User is deactivated!'
+                    ]);
+                }
             } else {
-                return ["status"=>2, "error"=>"User not found!"];
+                return response()->json([
+                    'status' => 2, 
+                    'message' => 'User not found!',
+                    'errors' => array('username' => array(' '), 'password' => array('Invalid Username/Password'))
+                ]);
             }
         } catch(ModelNotFoundException $e) {
             try {
-                $user = User::where('username', $request->input("username"))->firstOrFail();
+                $user = User::where('username', $request->input('username'))->firstOrFail();
                 
-                if(password_verify($request->input("password"), $user->password)) {
+                if(password_verify($request->input('password'), $user->password)) {
                     $user->remember_token = $this->quickRandom();
                     $user->save();
-                    return ["status"=>1, "auth"=>$user->auth, "token"=>$user->remember_token];
+                    
+                    if($user->status) {
+                        $responsedata = array('name' => $user->name,
+                            'token' => $user->remember_token,
+                            'auth' => $user->auth,
+                            'image' => 'http://jimac-test-suite.test/public/images/default.png'
+                        );
+
+                        return response()->json([
+                            'status' => 1,
+                            'user' => $responsedata
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => 2, 
+                            'message' => 'User is deactivated!'
+                        ]);
+                    }
                 } else {
-                    return ["status"=>2, "error"=>"User not found!"];
+                    return response()->json([
+                        'status' => 2,
+                        'message' => 'User not found!',
+                        'errors' => array('username' => array(' '), 'password' => array('Invalid Username/Password'))
+                    ]);
                 }
             } catch(ModelNotFoundException $e) {
-                return ["status"=>2, "error"=>"User not found!"];
+                return response()->json([
+                    'status' => 2, 
+                    'message' => 'User not found!',
+                    'errors' => array('username' => array(' '), 'password' => array('Invalid Username/Password'))
+                ]);
             }
         }
     }

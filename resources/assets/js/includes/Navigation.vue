@@ -13,7 +13,7 @@
                 </v-list-tile-avatar>
 
                 <v-list-tile-content>
-                    <v-list-tile-title class="user-name">Juan Dela Cruz</v-list-tile-title>
+                    <v-list-tile-title class="user-name">{{ user_name }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
         </v-list>
@@ -43,20 +43,18 @@ import { mapGetters } from 'vuex';
 export default {
     name: 'Navigation',
     data: () => ({
-        user: {
-            image: "http://jimac-test-suite.test/public/images/default.png"
-        }
+
     }),
     computed: mapGetters({
         drawer: 'navigation/shown',
         items: 'navigation/items',
-        auth: 'auth/userAuth'
+        auth: 'auth/auth',
+        user_name: 'auth/name'
     }),
     methods: {
         logout() {
-            this.$store.commit('auth/changeAuth', {auth: 0});
-            this.$cookies.set('auth', 0)
-            this.$cookies.remove('jts_token')
+            this.$store.dispatch('auth/logout');
+            this.$cookies.remove('token')
             this.$router.push('/login')
         },
         listItemClick(e) {

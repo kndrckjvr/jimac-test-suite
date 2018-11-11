@@ -1,20 +1,34 @@
+
+// states
 export const state = { 
-    userAuth: ""
+    user: {}
 }
 
 // getters
 export const getters = {
-    userAuth: state => state.userAuth
+    name: state => state.user.name,
+    auth: state => state.user.auth,
 }
 
 // actions
 export const actions = {
-    changeAuth: ({commit}) => commit('changeAuth', payload)
+    setUser: ({commit}) => commit('setUser', payload),
+    logout: ({commit}) => commit('logout')
 }
 
 // mutations
 export const mutations = {
-    changeAuth(state, payload) {
-        state.userAuth = payload.auth
+    setUser(state, payload) {
+        if(payload.user === undefined)
+            state.user = {
+                'auth' : '0'
+            }
+        else
+            state.user = payload.user
+    },
+    logout(state) {
+        state.user = {
+            'auth' : '0'
+        }
     }
 }

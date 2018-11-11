@@ -12,14 +12,11 @@ Vue.use(Vuetify)
 Vue.use(VueCookies)
 Vue.config.productionTip = false
 Vue.prototype.$checkAuth = checkAuth
+
 VueCookies.config('30d')
-if(!VueCookies.isKey("auth")) {
-    VueCookies.set('auth', 0)
-} else {
-    store.commit('auth/changeAuth', {auth: VueCookies.get('auth')});
-}
+
 router.beforeEach((to, from, next) => {
-    if(checkAuth(to.meta.auth, VueCookies.get('auth'), -1)) {
+    if(checkAuth(to.meta.auth, store.state.auth.user.auth)) {
         if(!VueCookies.isKey('testCaseTitle') && to.name == "Module Maintenance") {
             next('/dashboard')
             return
@@ -27,8 +24,8 @@ router.beforeEach((to, from, next) => {
         store.commit('extras/setToolbarTitle', {name:to.name})
         next()
     } else {
-        if(checkAuth(VueCookies.get('auth'), [-1, 1, 2, 3, 4])) {
-            if(checkAuth(VueCookies.get('auth'), [1])) {
+        if(checkAuth(store.state.auth.user.auth, [-1, 1, 2, 3, 4])) {
+            if(checkAuth(store.state.auth.user.auth, [1])) {
                 next('/dashboard')
             }
         } else {
@@ -37,10 +34,28 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-new Vue({
-    el: '#app',
-    router,
-    store,
-    components: { App },
-    template: '<App/>'
+axios.post(store.state.extras.baseUrl + 'api/sessioncheck', {
+    token: VueCookies.isKey('token') ? VueCookies.get('token') : ''
+}).then((res) => {
+    if(!res.data.status) {
+        // Add Error message
+        return
+    } else if(res.data.status == 2) {
+        this.$store.commit('snackbar/showSnack', {
+            "text" : res.data.message, 
+            "icon" : "warning", 
+            "color" : "red"
+        })
+    }
+
+    store.commit('auth/setUser', {user:res.data.user})
+    new Vue({
+        el: '#app',
+        router,
+        store,
+        components: { App },
+        template: '<App/>'
+    })
+}).catch((e) => {
+    //Internal Server Error
 })

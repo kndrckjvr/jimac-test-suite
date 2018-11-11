@@ -234,9 +234,8 @@ export default {
     getData() {
       this.loading = true
       this.testCases = []
-      axios.post(this.baseUrl + 'api/testcase/getdata',{
-        id: this.$cookies.get('jts_token')
-      }).then((res)=> {
+      axios.post(this.baseUrl + 'api/testcase/getdata')
+      .then((res)=> {
         this.$store.commit('testCase/setTestCaseTitle', {title: "Test Case #" + res.data.testCaseId})
         this.loading = false
         if(res.data.status) {

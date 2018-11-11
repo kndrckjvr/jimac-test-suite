@@ -29,7 +29,7 @@ class TestCaseController extends Controller
         $user = User::where('remember_token', $request->input('id'))->get();  
         if(TestCase::where([
             ['test_case_name', '=', $request->input('testCaseTitle')],
-            ['user_id', '=', $user[0]->id]
+            ['user_id', '=', session('')]
             ])->count()) {
             return response()->json([
                             "status" => 0,

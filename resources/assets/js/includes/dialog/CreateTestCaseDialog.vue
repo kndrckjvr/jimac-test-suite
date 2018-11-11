@@ -61,7 +61,7 @@ export default {
       this.testCaseTitleError = []
       axios.post(this.baseUrl+'api/testcase/create',{
         testCaseTitle: this.testCaseTitle,
-        id: this.$cookies.get('jts_token')
+        id: this.$cookies.get('token')
       }).then((res) => {
         this.loading = false
         if(res.data.status) {

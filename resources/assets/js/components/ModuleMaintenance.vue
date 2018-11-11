@@ -194,7 +194,7 @@ export default {
       this.loading = true
       this.modules = []
       axios.post(this.baseUrl + 'api/module/getdata',{
-        id: this.$cookies.get('jts_token'),
+        id: this.$cookies.get('token'),
         testCaseId: this.$cookies.get('testCaseId')
       }).then((res)=> {
         this.loading = false
