@@ -9,7 +9,7 @@
             <v-list-tile avatar>
                 <v-list-tile-avatar>
                     <!-- <img v-bind:src="user.image"> -->
-                    <img src="https://randomuser.me/api/portraits/men/85.jpg">
+                    <img :src="user_image">
                 </v-list-tile-avatar>
 
                 <v-list-tile-content>
@@ -49,10 +49,23 @@ export default {
         drawer: 'navigation/shown',
         items: 'navigation/items',
         auth: 'auth/auth',
-        user_name: 'auth/name'
+        user_name: 'auth/name',
+        user_image: 'auth/image'
     }),
     methods: {
         logout() {
+            // Test Cases
+            this.$cookies.remove('testCaseId')
+            this.$cookies.remove('testCaseTitle')
+
+            // Modules
+            this.$cookies.remove('moduleId')
+            this.$cookies.remove('moduleName')
+
+            // Test Scenarios
+            this.$cookies.remove('testScenarioId')
+            this.$cookies.remove('testScenarioName')
+
             this.$store.dispatch('auth/logout');
             this.$cookies.remove('token')
             this.$router.push('/login')

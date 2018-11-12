@@ -26,16 +26,16 @@ class TestCaseController extends Controller
     }
 
     public function createTestCase(Request $request) {
-        $user = User::where('remember_token', $request->input('id'))->get();  
+        $user = User::where('remember_token', $request->input('token'))->get();
         if(TestCase::where([
             ['test_case_name', '=', $request->input('testCaseTitle')],
-            ['user_id', '=', session('')]
+            ['user_id', '=', $request->input('token')]
             ])->count()) {
             return response()->json([
                             "status" => 0,
                             "error"=> "The Test Case Title has already been taken."]);
         }
-                               
+        
         $testcase = new TestCase;
         $testcase->test_case_name = ucwords($request->input('testCaseTitle'));
         $testcase->user_id = $user[0]->id;
@@ -47,14 +47,18 @@ class TestCaseController extends Controller
     }
 
     public function deleteTestCase(Request $request) {
-        foreach($request->input('testCaseId') as $id) {
-            TestCase::where('id', $id)->delete();
+        foreach($request->input('testCaseId') as $test_case_id) {
+            foreach(Module::where('test_case_id', $test_case_id) as $module_id) {
+                TestScenario::where('module_id', $module_id)->delete();
+                Module::where('id', $module_id)->delete();
+            }
+            TestCase::where('id', $test_case_id)->delete();
         }
         return response()->json(["status"=>1]);
     }
 
     public function getData(Request $request) {
-        $user = User::where('remember_token', $request->input('id'))->get();
+        $user = User::where('remember_token', $request->input('token'))->get();
         $api_data = array();
         foreach(TestCase::where('user_id',$user[0]->id)->cursor() as $testcase) {
             $data["value"] = false;

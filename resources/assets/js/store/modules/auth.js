@@ -8,6 +8,7 @@ export const state = {
 export const getters = {
     name: state => state.user.name,
     auth: state => state.user.auth,
+    image: state => state.user.image,
 }
 
 // actions

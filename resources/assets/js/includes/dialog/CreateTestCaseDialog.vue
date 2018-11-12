@@ -61,32 +61,27 @@ export default {
       this.testCaseTitleError = []
       axios.post(this.baseUrl+'api/testcase/create',{
         testCaseTitle: this.testCaseTitle,
-        id: this.$cookies.get('token')
+        token: this.$cookies.get('token')
       }).then((res) => {
         this.loading = false
         if(res.data.status) {
           this.$cookies.set('testCaseTitle', this.testCaseTitle)
           this.$cookies.set('testCaseId', res.data.testCaseId)
+
           this.closeCreateTestCaseDialog()
+
           this.$store.commit('testCase/setTestCaseTitle', {title: this.testCaseTitle})
           this.$store.commit('testCase/setTestCaseId', {testCaseId: res.data.testCaseId})
+
           this.$router.push('/module')
         } else if(res.data.status == 0) {
           this.testCaseTitleError = res.data.error
         } else {
-          this.$store.commit('snackbar/showSnack', {
-                    "text":"Http Error!", 
-                    "icon":"warning", 
-                    "color":"red"
-                })
+          this.$store.commit('snackbar/showError', { "text" : "Http Error!" })
         }
       }).catch((e) => {
         this.loading = false
-        this.$store.commit('snackbar/showSnack', {
-                    "text":"Internal Server Error!", 
-                    "icon":"warning", 
-                    "color":"red"
-                })
+        this.$store.commit('snackbar/showError', { "text":"Internal Server Error!" })
       })
     }
   },

@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
             next('/dashboard')
             return
         }
-        store.commit('extras/setToolbarTitle', {name:to.name})
+        store.commit('extras/setToolbarTitle', {name : to.name})
         next()
     } else {
         if(checkAuth(store.state.auth.user.auth, [-1, 1, 2, 3, 4])) {
@@ -41,11 +41,7 @@ axios.post(store.state.extras.baseUrl + 'api/sessioncheck', {
         // Add Error message
         return
     } else if(res.data.status == 2) {
-        this.$store.commit('snackbar/showSnack', {
-            "text" : res.data.message, 
-            "icon" : "warning", 
-            "color" : "red"
-        })
+        this.$store.commit('snackbar/showError', { "text" : res.data.message })
     }
 
     store.commit('auth/setUser', {user:res.data.user})

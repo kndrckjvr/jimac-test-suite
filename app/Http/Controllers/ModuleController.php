@@ -10,6 +10,41 @@ use App\TestScenario;
 class ModuleController extends Controller
 {
     //
+    public function createModule(Request $request) {
+        if(empty($request->input('moduleName')))
+            return response()->json([
+                'status' => 0,
+                'error' => 'The Module Name is required.'
+            ]);
+
+        if(Module::where([
+            ['module_name', '=', $request->input('moduleName')],
+            ['test_case_id', '=', $request->input('testCaseId')]
+            ])->count()) {
+            return response()->json([
+                'status' => 0,
+                'error' => 'The Module Name has already been taken.'
+            ]);
+        }
+        
+        $module = new Module;
+        $module->module_name = ucwords($request->input('moduleName'));
+        $module->test_case_id = $request->input('testCaseId');
+        $module->save();
+
+        return response()->json([
+            'status' => 1,
+            'moduleId' => $module->id
+        ]);
+    }
+
+    public function deleteModule(Request $request) {
+        foreach($request->input('moduleId') as $id) {
+            Module::where('id', $id)->delete();
+        }
+        return response()->json(["status"=>1]);
+    }
+
     public function getData(Request $request) {
         $api_data = array();
         foreach(Module::where('test_case_id', $request->input('testCaseId'))->cursor() as $module) {
@@ -21,14 +56,21 @@ class ModuleController extends Controller
             $data['moduleId'] = $module->id;
             array_push($api_data, $data);
         }
-        return response()->json(["status"=>1,"modules" => $api_data]);
+        return response()->json([
+            'status' => 1,
+            'modules' => $api_data
+        ]);
     }
 
     public function getLatestId(Request $request) {
         if(DB::table('modules')->orderBy('id', 'DESC')->first() != null)
-            return response()->json(["moduleId"=>DB::table('modules')->orderBy('id', 'DESC')->first()->id + 1]);
+            return response()->json([
+                'moduleId'=>DB::table('modules')->orderBy('id', 'DESC')->first()->id + 1
+            ]);
         else
-            return response()->json(["moduleId"=>1]);
+            return response()->json([
+                'moduleId'=>1
+            ]);
     }
 
     public function getPassed($testCaseId) { 

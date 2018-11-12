@@ -5,6 +5,7 @@ import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
 import TestCaseMaintenance from '../components/TestCaseMaintenance'
 import ModuleMaintenance from '../components/ModuleMaintenance'
+import TestScenarioMaintenance from '../components/TestScenarioMaintenance'
 
 Vue.use(Router)
 
@@ -57,6 +58,14 @@ export default new Router({
       path: '/module',
       name: 'Module Maintenance',
       component: ModuleMaintenance,
+      meta: {
+        auth: [1]
+      }
+    },
+    {
+      path: '/testscenario',
+      name: 'Test Scenario Maintenance',
+      component: TestScenarioMaintenance,
       meta: {
         auth: [1]
       }

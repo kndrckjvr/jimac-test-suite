@@ -15,6 +15,34 @@ class UserController extends Controller
         
     }
 
+    public function checkSess(Request $request) {
+        $userdata = array('name' => '',
+            'token' => '',
+            'auth' => '0',
+            'image' => 'http://jimac-test-suite.test/storage/images/default.png'
+        );
+
+        if(!empty($request->input('token'))) {
+            foreach(User::where('remember_token', $request->input('token'))->cursor() as $user) {
+                if($user->status) {
+                    $userdata = array(
+                        'name' => $user->name,
+                        'token' => $user->remember_token,
+                        'auth' => $user->auth,
+                        'image' => 'http://jimac-test-suite.test/storage/images/default.png'
+                    );
+
+                } else 
+                    return response()->json([
+                        'status' => '2', 
+                        'user' => [], 
+                        'message' => 'User is deactivated!']);
+            }
+        }
+        
+        return response()->json(['status' => 1,'user' => $userdata]);
+    }
+
     public function createTestUser() {
         $data = array(
             'sqa' => array(
@@ -65,8 +93,7 @@ class UserController extends Controller
             $user->remember_token = $value['remember_token'];
             $user->save();
         }
-
-        return 'Users has been added!';
+        return redirect('/');
     }
 
     public function loginUser(Request $request) {
@@ -97,7 +124,7 @@ class UserController extends Controller
                     $responsedata = array('name' => $user->name,
                         'token' => $user->remember_token,
                         'auth' => $user->auth,
-                        'image' => 'http://jimac-test-suite.test/public/images/default.png'
+                        'image' => 'http://jimac-test-suite.test/storage/images/default.png'
                     );
 
                     return response()->json([
@@ -129,7 +156,7 @@ class UserController extends Controller
                         $responsedata = array('name' => $user->name,
                             'token' => $user->remember_token,
                             'auth' => $user->auth,
-                            'image' => 'http://jimac-test-suite.test/public/images/default.png'
+                            'image' => 'http://jimac-test-suite.test/storage/images/default.png'
                         );
 
                         return response()->json([

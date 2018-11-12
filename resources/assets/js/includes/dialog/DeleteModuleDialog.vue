@@ -17,17 +17,17 @@
       <v-card-title class="pb-0 mb-0">
         <v-container grid-list-md fluid class="mt-0">
           <v-layout row wrap>
-            <v-flex :key="i" v-for="(item, i) in storeTestCases" md12>
+            <v-flex :key="i" v-for="(item, i) in storeModules" md12>
               <v-card>
                 <v-card-title>
-                  <h4>{{item.testCaseName}}</h4>
+                  <h4>{{item.moduleName}}</h4>
                   <!-- <p>Modules: {{ item.modules }}</p>
                   <p>Created: {{ item.createdBy.date }}</p> -->
                 </v-card-title>
               </v-card>
             </v-flex>
             <v-flex md12>
-              <h4 class="red--text">Note: This will delete all Modules and Test Scenarios inside.</h4>
+              <h4 class="red--text">Note: This will delete all the Test Scenarios inside.</h4>
             </v-flex>
           </v-layout>
         </v-container>
@@ -60,40 +60,47 @@ export default {
     toolbar_title: ''
   }),
   watch: {
-    storeTestCases: function(newStoreTestCases, oldStoreTestCases) {
-      if(this.storeTestCases.length > 1) {
-        this.toolbar_title = "Are you sure to delete these Test Cases?"
+    storeModules: function(newStoreModules, oldStoreModules) {
+      if(this.storeModules.length > 1) {
+        this.toolbar_title = "Are you sure to delete these Modules?"
       } else {
-        this.toolbar_title = "Are you sure to delete this Test Case?"
+        this.toolbar_title = "Are you sure to delete this Module?"
       }
     }
   },
   methods: {
     deleteAll() {
-      var testCaseId = []
-      for(var testCase in this.storeTestCases) {
-        testCaseId.push(this.storeTestCases[testCase].testCaseId)
-      }
-      console.log(testCaseId)
-      axios.post(this.baseUrl + 'api/testcase/delete',{
-        testCaseId: testCaseId
+      var moduleId = []
+
+      for(var module in this.storeModules)
+        moduleId.push(this.storeModules[module].moduleId)
+
+      axios.post(this.baseUrl + 'api/module/delete',{
+        moduleId: moduleId
       }).then((res) => {
-        if(res.data.status) {
-          this.$store.commit('testCase/setTestCase', {testCase: []})
-          this.$store.commit('dialog/closeDialog', {dialog: "deleteTestCaseDialog"})
+        if(res.data.status) {      
+          axios.post(this.baseUrl + 'api/module/getlatestid', {
+            testCaseId: this.testCaseId
+          }).then((res) => {
+            this.$store.commit('module/setModuleName', { moduleName : "Module #" + res.data.moduleId })
+          }).catch((e) => {
+            this.$store.commit('snackbar/showError', { "text" : "Internal Server Error!" })
+          })
+          this.$store.commit('module/setModules', {modules: []})
+          this.$store.commit('dialog/closeDialog', {dialog: "deleteModuleDialog"})
         }
       }).catch((e) => {
         console.log(e)
       })
     },
     exit() {
-      this.$store.commit('dialog/closeDialog', {dialog: "deleteTestCaseDialog"})
+      this.$store.commit('dialog/closeDialog', {dialog: "deleteModuleDialog"})
     }
   },
   computed: mapGetters({
     baseUrl: 'extras/baseUrl',
-    show: 'dialog/deleteTestCaseDialog',
-    storeTestCases: 'testCase/testCase'
+    show: 'dialog/deleteModuleDialog',
+    storeModules: 'module/modules'
   })
 }
 </script>

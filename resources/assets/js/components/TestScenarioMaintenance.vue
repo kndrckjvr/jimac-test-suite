@@ -41,7 +41,7 @@
                     slot="activator"
                     color="primary" 
                     :disabled="loading" 
-                    @click="deleteModules()" 
+                    @click="deleteTestCase()" 
                     class="mb-2">
                     <v-icon>delete_forever</v-icon>
                   </v-btn>
@@ -133,68 +133,44 @@
         slot="activator"
         right
         fab
-        to="/testcase" >
+        to="/module" >
         <v-icon>build</v-icon>
       </v-btn>
-      <span>Back to Test Case Maintenance</span>
+      <span>Back to Module Maintenance</span>
     </v-tooltip>
-    <create-module-dialog />
-    <delete-module-dialog />
+    <!-- <create-module-dialog></create-module-dialog> -->
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import CreateModuleDialog from '../includes/dialog/CreateModuleDialog';
-import DeleteModuleDialog from '../includes/dialog/DeleteModuleDialog';
 export default {
   components: {
-    CreateModuleDialog,
-    DeleteModuleDialog,
+    CreateModuleDialog
   },
   data: () => ({
     loading: true,
     pagination: {
-      sortBy: 'moduleName'
+      sortBy: 'scenarioId'
     },
     search: '',
     headers: [
-      { text: 'Module Name', value: 'moduleName' },
-      { text: 'Number of Scenarios', value: 'scenarios' },
-      { text: 'Passed', value: 'passed' },
-      { text: 'Failed', value: 'failed' },
-      { text: 'Skipped', value: 'skipped' }
+      { text: 'TS ID', value: 'scenarioId' },
+      { text: 'Test Scenario Name', value: 'testScenarioName' },
+      { text: 'Description', value: 'description' },
+      { text: 'Status', value: 'status' },
+      { text: 'Updated on', value: 'update' }
     ],
-    modules: [],
+    testScenario: [],
     selected: []
   }),
   mounted() {
-    axios.post(this.baseUrl + 'api/module/getlatestid', {
-      testCaseId: this.$cookies.get('testCaseId')
-    }).then((res) => {
-      this.$store.commit('module/setModuleName', { moduleName : "Module #" + res.data.moduleId })
-    }).catch((e) => {
-      this.$store.commit('snackbar/showError', { "text" : "Internal Server Error!" })
-    })
     this.getData()
-  },
-  watch: {
-    storeModules(newModules, oldModules) {
-      if(newModules.length == 0)
-        this.getData()
-    }
   },
   methods: {
     openCreateModuleDialog() {
       this.$store.commit('dialog/showDialog', { dialog : "createModuleDialog" })
-    },
-    deleteModules() {
-      if(this.selected.length < 1) {
-        this.$store.commit('snackbar/showError', { "text" : "No Module Selected" })
-        return
-      }
-      this.$store.commit('module/setModules', {modules: this.selected})
-      this.$store.commit('dialog/showDialog', {dialog: "deleteModuleDialog"})
     },
     refresh() {
       this.getData()
@@ -231,10 +207,7 @@ export default {
     }
   },
   computed: mapGetters({
-    baseUrl: 'extras/baseUrl',
-    testCaseId: 'testCase/testCaseId',
-    moduleName: 'module/moduleName',
-    storeModules: 'module/modules'
+    baseUrl: 'extras/baseUrl'
   })
 }
 </script>

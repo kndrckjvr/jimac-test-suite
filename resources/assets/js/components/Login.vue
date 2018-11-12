@@ -20,11 +20,13 @@
                                     label="Username or Email"
                                     v-model="username"
                                     :disabled="loading"
+                                    @keydown.enter="sendUserDetails()"
                                     :error-messages="usernameError" />
                                 <v-text-field
                                     label="Password"
                                     v-model="password"
                                     :disabled="loading"
+                                    @keydown.enter="sendUserDetails()"
                                     :error-messages="passwordError"
                                     :append-icon="hidePass ? 'visibility' : 'visibility_off'"
                                     @click:append="() => (hidePass = !hidePass)"
@@ -77,11 +79,7 @@ export default {
                     this.$router.push('/dashboard')
                     return
                 } else if(res.data.status == 2) {
-                    this.$store.commit('snackbar/showSnack', {
-                        "text" : res.data.message, 
-                        "icon" : "warning", 
-                        "color" : "red"
-                    })
+                    this.$store.commit('snackbar/showError', { "text" : res.data.message })
                 }
                 for(var key in res.data.errors) {
                     switch(key) {
@@ -95,11 +93,7 @@ export default {
                 }
             }).catch((e) => {
                 this.loading = false
-                this.$store.commit('snackbar/showSnack', {
-                    "text":"Internal Server Error!", 
-                    "icon":"warning", 
-                    "color":"red"
-                })
+                this.$store.commit('snackbar/showError', { "text" : "Internal Server Error!" })
             })
         }
     },

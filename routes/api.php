@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/sessioncheck', 'SessionController@checkSess');
+Route::post('/sessioncheck', 'UserController@checkSess');
 
 // User
 Route::post('/user/login', 'UserController@loginUser');
@@ -31,3 +31,5 @@ Route::post('/testcase/delete', 'TestCaseController@deleteTestCase');
 // Module
 Route::post('/module/getlatestid', 'ModuleController@getLatestId');
 Route::post('/module/getdata', 'ModuleController@getData');
+Route::post('/module/create', 'ModuleController@createModule');
+Route::post('/module/delete', 'ModuleController@deleteModule');

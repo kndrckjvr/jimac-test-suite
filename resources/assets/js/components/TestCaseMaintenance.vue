@@ -179,6 +179,17 @@ export default {
       ],
   }),
   mounted() {
+    // Test Cases
+    this.$cookies.remove('testCaseId')
+    this.$cookies.remove('testCaseTitle')
+
+    // Modules
+    this.$cookies.remove('moduleId')
+    this.$cookies.remove('moduleName')
+
+    // Test Scenarios
+    this.$cookies.remove('testScenarioId')
+    this.$cookies.remove('testScenarioName')
     this.getData()
   },
   watch: {
@@ -196,11 +207,7 @@ export default {
     },
     editTestCase() {
       if(this.selected.length < 1) {
-        this.$store.commit('snackbar/showSnack', {
-                  "text":"No Test Cases Selected", 
-                  "icon":"warning", 
-                  "color":"red"
-              })
+        this.$store.commit('snackbar/showError', { "text" : "No Test Cases Selected" })
         return
       }
 
@@ -218,11 +225,7 @@ export default {
     },
     deleteTestCase() {
       if(this.selected.length < 1) {
-        this.$store.commit('snackbar/showSnack', {
-                  "text":"No Test Cases Selected", 
-                  "icon":"warning", 
-                  "color":"red"
-              })
+        this.$store.commit('snackbar/showError', { "text" : "No Test Case Selected" })
         return
       }
       this.$store.commit('testCase/setTestCase', {testCase: this.selected})
@@ -234,26 +237,20 @@ export default {
     getData() {
       this.loading = true
       this.testCases = []
-      axios.post(this.baseUrl + 'api/testcase/getdata')
-      .then((res)=> {
+
+      axios.post(this.baseUrl + 'api/testcase/getdata', {
+        token: this.$cookies.get('token')
+      }).then((res)=> {
         this.$store.commit('testCase/setTestCaseTitle', {title: "Test Case #" + res.data.testCaseId})
         this.loading = false
         if(res.data.status) {
           this.testCases = res.data.testCases
         } else {
-          this.$store.commit('snackbar/showSnack', {
-                    "text":"Status Error!", 
-                    "icon":"warning", 
-                    "color":"red"
-                })
+          this.$store.commit('snackbar/showError', { "text" : "Status Error!" })
         }
       }).catch((e) => {
         this.loading = false
-        this.$store.commit('snackbar/showSnack', {
-                    "text":"Internal Server Error!", 
-                    "icon":"warning", 
-                    "color":"red"
-                })
+        this.$store.commit('snackbar/showError', { "text" : "Internal Server Error!" })
       })
     },
     toggleAll () {

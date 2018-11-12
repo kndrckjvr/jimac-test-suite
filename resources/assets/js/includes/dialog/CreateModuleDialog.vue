@@ -24,6 +24,7 @@
             <v-layout>
               <v-text-field
                 label="Module Name"
+                :error-messages="moduleNameError" 
                 :disabled="loading"
                 v-model="$store.state.module.moduleName" />
             </v-layout>
@@ -48,7 +49,8 @@ import {mapGetters} from 'vuex';
 export default {
   name: 'CreateModuleDialog',
   data: () => ({
-    loading: false
+    loading: false,
+    moduleNameError: []
   }),
   methods: {
     closeDialog() {
@@ -56,27 +58,31 @@ export default {
     },
     saveModuleName() {
       this.loading = true
-      axios.post(this.baseUrl + 'api/module/getlastestid',{
-        testCaseId: this.testCaseId,
+      this.moduleNameError = []
+      axios.post(this.baseUrl + 'api/module/create',{
+        testCaseId: this.$cookies.get('testCaseId'),
         moduleName: this.moduleName
       }).then((res) => {
         this.loading = false
-        
+        if(res.data.status) {
+          this.closeDialog()
+
+          this.$store.commit('module/setModules', {modules : res.data.modules})
+
+          this.$router.push('/testscenario')
+        } else {
+          this.moduleNameError = res.data.error
+        }
       }).catch((e) => {
         this.loading = false
-        this.$store.commit('snackbar/showSnack', {
-                    "text":"Internal Server Error!", 
-                    "icon":"warning", 
-                    "color":"red"
-                })
+        this.$store.commit('snackbar/showError', { "text" : "Internal Server Error!" })
       })
     }
   },
   computed: mapGetters({
     show: 'dialog/createModuleDialog',
     baseUrl: 'extras/baseUrl',
-    moduleName: 'module/moduleName',
-    testCaseId: 'testCase/testCaseId'
+    moduleName: 'module/moduleName'
   })
 }
 </script>

@@ -30,7 +30,11 @@ export const mutations = {
         state.icon = payload.icon
         state.color = payload.color
     },
-    hideSnack(state) {
-        state.show = false
+    showError(state, payload) {
+        state.show = true
+        setTimeout(() => { state.show = false }, 3000)
+        state.text = payload.text
+        state.icon = "warning"
+        state.color = "red"
     }
 }
