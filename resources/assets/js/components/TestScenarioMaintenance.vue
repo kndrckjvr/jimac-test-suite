@@ -4,7 +4,7 @@
       <v-flex md12>
         <v-card>
           <v-toolbar dark card color="primary">
-            <v-toolbar-title>{{ $cookies.get('testCaseTitle') }} - Modules</v-toolbar-title>
+            <v-toolbar-title>{{ $cookies.get('moduleName') }} - Test Scenario</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon color="primary" :loading="loading" @click="refresh()" class="mb-2"><v-icon>refresh</v-icon></v-btn>
           </v-toolbar>
@@ -17,11 +17,11 @@
                     slot="activator"
                     color="primary" 
                     :disabled="loading" 
-                    @click="openCreateModuleDialog()" 
+                    @click="openCreateScenarioDialog()" 
                     class="mb-2">
                     <v-icon>add</v-icon>
                   </v-btn>
-                  <span>Create Module</span>
+                  <span>Create Test Scenario</span>
                 </v-tooltip>
                 <v-tooltip bottom>
                   <v-btn 
@@ -29,11 +29,11 @@
                     slot="activator"
                     color="primary" 
                     :disabled="loading" 
-                    @click="editTestCase()" 
+                    @click="editScenario()" 
                     class="mb-2">
                     <v-icon>edit</v-icon>
                   </v-btn>
-                  <span>Edit Module</span>
+                  <span>Edit Test Scenario</span>
                 </v-tooltip>
                 <v-tooltip bottom>
                   <v-btn 
@@ -41,23 +41,11 @@
                     slot="activator"
                     color="primary" 
                     :disabled="loading" 
-                    @click="deleteTestCase()" 
+                    @click="deleteScenario()" 
                     class="mb-2">
                     <v-icon>delete_forever</v-icon>
                   </v-btn>
-                  <span>Delete Module</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                  <v-btn 
-                    icon 
-                    slot="activator"
-                    color="primary" 
-                    :disabled="loading" 
-                    @click="openTestCase()" 
-                    class="mb-2">
-                    <v-icon>arrow_forward</v-icon>
-                  </v-btn>
-                  <span>Open Module</span>
+                  <span>Delete Test Scenario</span>
                 </v-tooltip>
                 <v-spacer></v-spacer>
                 <v-text-field
@@ -70,11 +58,11 @@
               <v-data-table
                 v-model="selected"
                 :headers="headers"
-                :items="modules"
+                :items="testScenario"
                 :loading="loading"
                 :pagination.sync="pagination"
                 :search="search"
-                item-key="moduleId"
+                item-key="testScenarioId"
                 select-all
                 hide-actions
                 class="elevation-1" >
@@ -108,11 +96,10 @@
                         hide-details
                       ></v-checkbox>
                     </td>
-                    <td><strong>{{ props.item.moduleName }}</strong></td>
-                    <td class="text-xs-center">{{ props.item.scenarios }}</td>
-                    <td class="text-xs-center">{{ props.item.passed }}%</td>
-                    <td class="text-xs-center">{{ props.item.failed }}%</td>
-                    <td class="text-xs-center">{{ props.item.skipped }}%</td>
+                    <td><strong>{{ props.item.scenarioId }}</strong></td>
+                    <td class="text-xs-center">{{ props.item.testScenarioName }}</td>
+                    <td class="text-xs-center">{{ props.item.status }}</td>
+                    <td class="text-xs-center">{{ props.item.updated }}</td>
                   </tr>
                 </template>
                 <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -158,7 +145,6 @@ export default {
     headers: [
       { text: 'TS ID', value: 'scenarioId' },
       { text: 'Test Scenario Name', value: 'testScenarioName' },
-      { text: 'Description', value: 'description' },
       { text: 'Status', value: 'status' },
       { text: 'Updated on', value: 'update' }
     ],
@@ -178,13 +164,12 @@ export default {
     getData() {
       this.loading = true
       this.modules = []
-      axios.post(this.baseUrl + 'api/module/getdata', {
-        id: this.$cookies.get('token'),
-        testCaseId: this.$cookies.get('testCaseId')
+      axios.post(this.baseUrl + 'api/testscenario/getdata', {
+        moduleId: this.$cookies.get('moduleId')
       }).then((res)=> {
         this.loading = false
         if(res.data.status) {
-          this.modules = res.data.modules
+          this.testScenario = res.data.testScenario
         } else {
           this.$store.commit('snackbar/showError', { "text" : "Status Error!" })
         }
@@ -195,7 +180,7 @@ export default {
     },
     toggleAll () {
       if (this.selected.length) this.selected = []
-      else this.selected = this.modules.slice()
+      else this.selected = this.testScenario.slice()
     },
     changeSort (column) {
       if (this.pagination.sortBy === column) {

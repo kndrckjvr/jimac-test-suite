@@ -22,7 +22,7 @@ Route::post('/sessioncheck', 'UserController@checkSess');
 // User
 Route::post('/user/login', 'UserController@loginUser');
 
-//Test Case
+// Test Case
 Route::post('/testcase/getlatestid', 'TestCaseController@getLatestId');
 Route::post('/testcase/getdata', 'TestCaseController@getData');
 Route::post('/testcase/create', 'TestCaseController@createTestCase');
@@ -33,3 +33,6 @@ Route::post('/module/getlatestid', 'ModuleController@getLatestId');
 Route::post('/module/getdata', 'ModuleController@getData');
 Route::post('/module/create', 'ModuleController@createModule');
 Route::post('/module/delete', 'ModuleController@deleteModule');
+
+// Test Scenario
+Route::post('/testscenario/getdata', 'TestScenarioController@getData');

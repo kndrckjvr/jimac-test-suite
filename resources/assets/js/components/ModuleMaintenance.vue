@@ -29,7 +29,7 @@
                     slot="activator"
                     color="primary" 
                     :disabled="loading" 
-                    @click="editTestCase()" 
+                    @click="editModules()" 
                     class="mb-2">
                     <v-icon>edit</v-icon>
                   </v-btn>
@@ -46,18 +46,6 @@
                     <v-icon>delete_forever</v-icon>
                   </v-btn>
                   <span>Delete Module</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                  <v-btn 
-                    icon 
-                    slot="activator"
-                    color="primary" 
-                    :disabled="loading" 
-                    @click="openTestCase()" 
-                    class="mb-2">
-                    <v-icon>arrow_forward</v-icon>
-                  </v-btn>
-                  <span>Open Module</span>
                 </v-tooltip>
                 <v-spacer></v-spacer>
                 <v-text-field
@@ -187,6 +175,24 @@ export default {
   methods: {
     openCreateModuleDialog() {
       this.$store.commit('dialog/showDialog', { dialog : "createModuleDialog" })
+    },
+    editModules() {
+      if(this.selected.length < 1) {
+        this.$store.commit('snackbar/showError', { "text" : "No Test Cases Selected" })
+        return
+      }
+
+      if(this.selected.length > 1) {
+        //multiple edit
+      } else {
+        this.$store.commit('module/setModules', {'modules':this.selected[0].moduleName})
+        this.$store.commit('module/setModuleId', {'moduleId':this.selected[0].moduleId})
+        
+        this.$cookies.set('moduleName', this.selected[0].moduleName)
+        this.$cookies.set('moduleId', this.selected[0].moduleId)
+
+        this.$router.push('/testscenario')
+      }
     },
     deleteModules() {
       if(this.selected.length < 1) {

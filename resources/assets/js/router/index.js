@@ -43,7 +43,7 @@ export default new Router({
       name: 'Dashboard',
       component: Dashboard,
       meta: {
-        auth: [1]
+        auth: [1, 2]
       }
     },
     {
@@ -51,7 +51,7 @@ export default new Router({
       name: 'Test Case Maintenance',
       component: TestCaseMaintenance,
       meta: {
-        auth: [1]
+        auth: [1, 2]
       }
     },
     {
@@ -59,7 +59,7 @@ export default new Router({
       name: 'Module Maintenance',
       component: ModuleMaintenance,
       meta: {
-        auth: [1]
+        auth: [1, 2]
       }
     },
     {
@@ -67,7 +67,7 @@ export default new Router({
       name: 'Test Scenario Maintenance',
       component: TestScenarioMaintenance,
       meta: {
-        auth: [1]
+        auth: [1, 2]
       }
     }
   ]

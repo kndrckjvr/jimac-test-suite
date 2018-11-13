@@ -63,45 +63,51 @@ class ModuleController extends Controller
     }
 
     public function getLatestId(Request $request) {
-        if(DB::table('modules')->orderBy('id', 'DESC')->first() != null)
-            return response()->json([
-                'moduleId'=>DB::table('modules')->orderBy('id', 'DESC')->first()->id + 1
-            ]);
-        else
-            return response()->json([
-                'moduleId'=>1
-            ]);
+        $statement = DB::select("show table status like 'modules'");
+        return response()->json(['moduleId' => $statement[0]->Auto_increment]);
     }
 
-    public function getPassed($testCaseId) { 
+    public function getPassed($testCaseId) {
         $result = 0;
-        foreach(
-        Module::where('test_case_id', $testCaseId)->cursor() as $module) {
-            $result = $result + app('App\Http\Controllers\TestScenarioController')->getPassed($module->id);
+        $total = 0;
+        foreach(Module::where('test_case_id', $testCaseId)->cursor() as $module) {            
+            foreach(
+                TestScenario::where([
+                    ['module_id', '=', $module->id], 
+                    ['status', '=', '1']])->cursor() as $testScenario)
+                $result = $result + 1;      
+            $total = $total + TestScenario::where('module_id', $module->id)->count();
         }
-        $total = Module::where('test_case_id', $testCaseId)->count();
         if($total <= 0) return 0;
         return ($result / $total);
     }
 
     public function getFailed($testCaseId) {
         $result = 0;
-        foreach(
-        Module::where('test_case_id', $testCaseId)->cursor() as $module) {
-            $result = $result + app('App\Http\Controllers\TestScenarioController')->getFailed($module->id);
+        $total = 0;
+        foreach(Module::where('test_case_id', $testCaseId)->cursor() as $module) {            
+            foreach(
+                TestScenario::where([
+                    ['module_id', '=', $module->id], 
+                    ['status', '=', '0']])->cursor() as $testScenario)
+                $result = $result + 1;      
+            $total = $total + TestScenario::where('module_id', $module->id)->count();
         }
-        $total = Module::where('test_case_id', $testCaseId)->count();
         if($total <= 0) return 0;
         return ($result / $total);
     }
 
     public function getSkipped($testCaseId) {
         $result = 0;
-        foreach(
-        Module::where('test_case_id', $testCaseId)->cursor() as $module) {
-            $result = $result + app('App\Http\Controllers\TestScenarioController')->getSkipped($module->id);
+        $total = 0;
+        foreach(Module::where('test_case_id', $testCaseId)->cursor() as $module) {            
+            foreach(
+                TestScenario::where([
+                    ['module_id', '=', $module->id], 
+                    ['status', '=', '2']])->cursor() as $testScenario)
+                $result = $result + 1;      
+            $total = $total + TestScenario::where('module_id', $module->id)->count();
         }
-        $total = Module::where('test_case_id', $testCaseId)->count();
         if($total <= 0) return 0;
         return ($result / $total);
     }

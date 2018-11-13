@@ -237,6 +237,7 @@ export default {
     getData() {
       this.loading = true
       this.testCases = []
+      this.selected = []
 
       axios.post(this.baseUrl + 'api/testcase/getdata', {
         token: this.$cookies.get('token')

@@ -31,12 +31,20 @@
           </v-container>
         </v-form>
       </v-card-title>
+      <v-divider></v-divider>
       <v-card-actions>
+        <v-spacer></v-spacer>
         <v-btn
           color="primary"
-          class="full-width"
+          flat
           :loading="loading"
-          @click="saveTestCaseName()" >
+          @click="closeDialog()">
+          Dismiss
+        </v-btn>
+        <v-btn
+          color="primary"
+          :loading="loading"
+          @click="saveModuleName()" >
           Save
         </v-btn>
       </v-card-actions>

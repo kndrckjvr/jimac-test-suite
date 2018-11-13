@@ -3,9 +3,13 @@
     <v-card>
       <v-flex class="px-4 pb-4 pt-2">    
         <v-card-title primary-title class="pb-0 mb-0">
-        <div class="full-width">
+        <flex class="full-width">
             <h2 class="headline mb-0">Dashboard</h2>
-        </div>
+            <v-divider></v-divider>
+        </flex>
+        <v-flex class="py-2">
+          <p>Waley pang laman please penge ideas. HAHAHAHAH jk</p>
+        </v-flex>
         </v-card-title>
       </v-flex>
     </v-card>

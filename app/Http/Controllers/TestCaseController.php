@@ -47,11 +47,17 @@ class TestCaseController extends Controller
     }
 
     public function deleteTestCase(Request $request) {
+        $moduleIds = array();
+        $testScenarioIds = array();
         foreach($request->input('testCaseId') as $test_case_id) {
-            foreach(Module::where('test_case_id', $test_case_id) as $module_id) {
-                TestScenario::where('module_id', $module_id)->delete();
-                Module::where('id', $module_id)->delete();
+            foreach(Module::where('test_case_id', $test_case_id)->cursor() as $module) {
+                foreach(TestScenario::where('module_id', $module->id)->cursor() as $testScenario) {
+                    array_push($testScenarioIds, $testScenario->id);
+                }
+                array_push($moduleIds, $module->id);
             }
+            Module::whereIn('id', $moduleIds)->delete();
+            TestScenario::whereIn('id', $testScenarioIds)->delete();
             TestCase::where('id', $test_case_id)->delete();
         }
         return response()->json(["status"=>1]);
@@ -64,25 +70,30 @@ class TestCaseController extends Controller
             $data["value"] = false;
             $data["testCaseName"] = $testcase->test_case_name;
             $data["modules"] = Module::where('test_case_id', $testcase->id)->count();
+            $data["testScenarios"] = 0;
+            foreach(Module::where('test_case_id', $testcase->id)->cursor() as $module) {
+                foreach(TestScenario::where('module_id', $module->id)->cursor() as $testScenario) {
+                    $data["testScenarios"] = $data["testScenarios"] + 1;
+                }
+            }
             $data["passed"] = number_format((float)app('App\Http\Controllers\ModuleController')->getPassed($testcase->id)*100, 2, '.', '');
             $data["failed"] = number_format((float)app('App\Http\Controllers\ModuleController')->getFailed($testcase->id)*100, 2, '.', '');
             $data["skipped"] = number_format((float)app('App\Http\Controllers\ModuleController')->getSkipped($testcase->id)*100, 2, '.', '');
-            $data["createdBy"] = $testcase->created_at;
+            $data["createdAt"] = date('F j, Y', strtotime($testcase->created_at->toDateString()));
+            $data["updatedAt"] = date('F j, Y', strtotime($testcase->updated_at->toDateString()));
             $data["testCaseId"] = $testcase->id;
             array_push($api_data, $data);
         }
-
-        $testcaseid = DB::table('test_cases')->orderBy('id', 'DESC')->first() == null ?
-            1 : DB::table('test_cases')->orderBy('id', 'DESC')->first()->id + 1;
+            
+        $statement = DB::select("show table status like 'test_cases'");
         return response()->json([
                             "status" => 1,
                             "testCases" => $api_data,
-                            "testCaseId" => $testcaseid]);
+                            "testCaseId" => $statement[0]->Auto_increment]);
     }
 
     public function getLatestId(Request $request) {
-        $testcaseid = DB::table('test_cases')->orderBy('id', 'DESC')->first() == null ?
-            1 : DB::table('test_cases')->orderBy('id', 'DESC')->first()->id + 1;
-        return response()->json(["testCaseId" => $testcaseid]);
+        $statement = DB::select("show table status like 'test_cases'");
+        return response()->json(['testCaseId' => $statement[0]->Auto_increment]);
     }
 }
