@@ -36,5 +36,8 @@ export const mutations = {
         state.text = payload.text
         state.icon = "warning"
         state.color = "red"
+    },
+    hideSnack(state) {
+        state.show = false
     }
 }

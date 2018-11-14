@@ -4,8 +4,9 @@
       <v-flex md12>
         <v-card>
           <v-toolbar dark card color="primary">
-            <v-toolbar-title>{{ $cookies.get('testCaseTitle') }} - Modules</v-toolbar-title>
+            <v-toolbar-title>{{ testCaseTitle }} - Modules</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn flat dark :loading="loading" @click="editName()" class="mb-2">Edit Name</v-btn>
             <v-btn icon color="primary" :loading="loading" @click="refresh()" class="mb-2"><v-icon>refresh</v-icon></v-btn>
           </v-toolbar>
           <v-card-title>
@@ -128,6 +129,7 @@
     </v-tooltip>
     <create-module-dialog />
     <delete-module-dialog />
+    <rename-test-case-title-dialog/>
   </v-container>
 </template>
 
@@ -135,10 +137,13 @@
 import { mapGetters } from 'vuex';
 import CreateModuleDialog from '../includes/dialog/CreateModuleDialog';
 import DeleteModuleDialog from '../includes/dialog/DeleteModuleDialog';
+import RenameTestCaseTitleDialog from '../includes/dialog/RenameTestCaseTitleDialog';
+
 export default {
   components: {
     CreateModuleDialog,
     DeleteModuleDialog,
+    RenameTestCaseTitleDialog,
   },
   data: () => ({
     loading: true,
@@ -157,6 +162,7 @@ export default {
     selected: []
   }),
   mounted() {
+    this.$store.commit('testCase/setTestCaseTitle', {title : this.$cookies.get('testCaseTitle')})
     axios.post(this.baseUrl + 'api/module/getlatestid', {
       testCaseId: this.$cookies.get('testCaseId')
     }).then((res) => {
@@ -173,6 +179,9 @@ export default {
     }
   },
   methods: {
+    editName() {
+      this.$store.commit('dialog/showDialog', {dialog: "renameTestCaseDialog"})
+    },
     openCreateModuleDialog() {
       this.$store.commit('dialog/showDialog', { dialog : "createModuleDialog" })
     },
@@ -239,6 +248,7 @@ export default {
   computed: mapGetters({
     baseUrl: 'extras/baseUrl',
     testCaseId: 'testCase/testCaseId',
+    testCaseTitle: 'testCase/testCaseTitle',
     moduleName: 'module/moduleName',
     storeModules: 'module/modules'
   })

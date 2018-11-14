@@ -3,10 +3,10 @@
     <v-card>
       <v-flex class="px-4 pb-4 pt-2">    
         <v-card-title primary-title class="pb-0 mb-0">
-        <flex class="full-width">
+        <v-flex class="full-width">
             <h2 class="headline mb-0">Dashboard</h2>
             <v-divider></v-divider>
-        </flex>
+        </v-flex>
         <v-flex class="py-2">
           <p>Waley pang laman please penge ideas. HAHAHAHAH jk</p>
         </v-flex>

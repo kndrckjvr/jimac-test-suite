@@ -27,6 +27,7 @@ Route::post('/testcase/getlatestid', 'TestCaseController@getLatestId');
 Route::post('/testcase/getdata', 'TestCaseController@getData');
 Route::post('/testcase/create', 'TestCaseController@createTestCase');
 Route::post('/testcase/delete', 'TestCaseController@deleteTestCase');
+Route::post('/testcase/edit', 'TestCaseController@editTestCase');
 
 // Module
 Route::post('/module/getlatestid', 'ModuleController@getLatestId');

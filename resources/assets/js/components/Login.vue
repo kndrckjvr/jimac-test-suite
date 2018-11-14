@@ -75,6 +75,11 @@ export default {
                     // set token
                     this.$cookies.set('token', res.data.user.token)
                     // set user
+                    this.$store.commit('snackbar/showSnack', {
+                        "text" : "Login Successfully", 
+                        "icon" : "info", 
+                        "color" : "green"
+                    })
                     this.$store.commit('auth/setUser', { user : res.data.user })
                     this.$router.push('/dashboard')
                     return

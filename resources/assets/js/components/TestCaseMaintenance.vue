@@ -1,12 +1,13 @@
 <template ref="testcasemaintenance">
     <v-container fluid grid-list-md>
         <v-layout>
-            <v-flex md8>
+            <v-flex md12>
                 <v-card>
                     <v-toolbar dark card color="primary">
                         <v-toolbar-title>Test Cases</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-btn icon color="primary" :loading="loading" @click="refresh()" class="mb-2"><v-icon>refresh</v-icon></v-btn>
+                        <v-btn flat>Download<v-icon right>cloud_download</v-icon></v-btn>
                         <v-btn flat @click="openUploadDialog()">Upload<v-icon right>cloud_upload</v-icon></v-btn>
                     </v-toolbar>
                     <v-card-title>
@@ -114,9 +115,11 @@
                                 </td>
                                 <td><strong>{{ props.item.testCaseName }}</strong></td>
                                 <td class="text-xs-center">{{ props.item.modules }}</td>
+                                <td class="text-xs-center">{{ props.item.testScenarios }}</td>
                                 <td class="text-xs-center">{{ props.item.passed }}%</td>
                                 <td class="text-xs-center">{{ props.item.failed }}%</td>
                                 <td class="text-xs-center">{{ props.item.skipped }}%</td>
+                                <td class="text-xs-center">{{ props.item.updatedAt }}</td>
                               </tr>
                             </template>
                             <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -125,20 +128,6 @@
                           </v-data-table>
                         </div>
                     </v-card-title>
-                </v-card>
-            </v-flex>
-            <v-flex md4>
-                <v-card>
-                    <v-toolbar dark card color="primary">
-                        <v-toolbar-title>Templates</v-toolbar-title>
-                    </v-toolbar>
-                    <v-card-actions>
-                        <v-btn 
-                            class="full-width"
-                            color="primary">
-                            Download XLS Template<v-icon right>cloud_download</v-icon>
-                        </v-btn>
-                    </v-card-actions>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -158,7 +147,7 @@ export default {
   components: {
     UploadDialog,
     CreateTestCaseDialog,
-    DeleteTestCaseDialog
+    DeleteTestCaseDialog,
   },
   data: () => ({
       pagination: {
@@ -173,9 +162,11 @@ export default {
       headers: [
         { text: 'Test Case Name', value: 'testCaseName' },
         { text: 'Number of Modules', value: 'modules' },
+        { text: 'Number of Scenarios', value: 'testScenarios' },
         { text: 'Passed', value: 'passed' },
         { text: 'Failed', value: 'failed' },
-        { text: 'Skipped', value: 'skipped' }
+        { text: 'Skipped', value: 'skipped' },
+        { text: 'Last Updated', value: 'updatedAt'}
       ],
   }),
   mounted() {

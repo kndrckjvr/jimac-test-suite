@@ -53,6 +53,8 @@ class ModuleController extends Controller
             $data['passed'] = number_format((float)app('App\Http\Controllers\TestScenarioController')->getPassed($module->id)*100, 2, '.', '');
             $data['failed'] = number_format((float)app('App\Http\Controllers\TestScenarioController')->getFailed($module->id)*100, 2, '.', '');
             $data['skipped'] = number_format((float)app('App\Http\Controllers\TestScenarioController')->getSkipped($module->id)*100, 2, '.', '');
+            $data['createdAt'] = date('F j, Y', strtotime($module->created_at->toDateString()));
+            $data['updatedAt'] = date('F j, Y', strtotime($module->updated_at->toDateString()));
             $data['moduleId'] = $module->id;
             array_push($api_data, $data);
         }

@@ -29,7 +29,7 @@
               label="Test Case Title"
               :error-messages="testCaseTitleError"
               :disabled="loading"
-              v-model="$store.state.testCase.test_case_title" />
+              v-model="$store.state.testCase.testCaseTitle" />
           </v-layout>
         </v-container>
       </v-card-title>
@@ -90,7 +90,7 @@ export default {
   computed: mapGetters({
     show: 'dialog/createTestCaseDialog',
     baseUrl: 'extras/baseUrl',
-    testCaseTitle: 'testCase/test_case_title'
+    testCaseTitle: 'testCase/testCaseTitle'
   })
 }
 </script>

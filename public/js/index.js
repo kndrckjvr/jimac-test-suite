@@ -23776,10 +23776,11 @@ __WEBPACK_IMPORTED_MODULE_3__router__["a" /* default */].beforeEach(function (to
         }
     }
 });
-
+document.getElementById('loading').style.display = 'inline-block';
 axios.post(__WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].state.extras.baseUrl + 'api/sessioncheck', {
     token: __WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.isKey('token') ? __WEBPACK_IMPORTED_MODULE_2_vue_cookies___default.a.get('token') : ''
 }).then(function (res) {
+    document.getElementById('loading').style.display = 'none';
     if (!res.data.status) {
         // Add Error message
         return;
@@ -74449,7 +74450,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -74575,6 +74576,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     // set token
                     _this.$cookies.set('token', res.data.user.token);
                     // set user
+                    _this.$store.commit('snackbar/showSnack', {
+                        "text": "Login Successfully",
+                        "icon": "info",
+                        "color": "green"
+                    });
                     _this.$store.commit('auth/setUser', { user: res.data.user });
                     _this.$router.push('/dashboard');
                     return;
@@ -74854,7 +74860,7 @@ var render = function() {
                 { staticClass: "pb-0 mb-0", attrs: { "primary-title": "" } },
                 [
                   _c(
-                    "flex",
+                    "v-flex",
                     { staticClass: "full-width" },
                     [
                       _c("h2", { staticClass: "headline mb-0" }, [
@@ -75164,17 +75170,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -75199,7 +75194,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       testCases: [],
       selected: [],
       loading: true
-    }, _defineProperty(_ref, 'pagination', {}), _defineProperty(_ref, 'headers', [{ text: 'Test Case Name', value: 'testCaseName' }, { text: 'Number of Modules', value: 'modules' }, { text: 'Passed', value: 'passed' }, { text: 'Failed', value: 'failed' }, { text: 'Skipped', value: 'skipped' }]), _ref;
+    }, _defineProperty(_ref, 'pagination', {}), _defineProperty(_ref, 'headers', [{ text: 'Test Case Name', value: 'testCaseName' }, { text: 'Number of Modules', value: 'modules' }, { text: 'Number of Scenarios', value: 'testScenarios' }, { text: 'Passed', value: 'passed' }, { text: 'Failed', value: 'failed' }, { text: 'Skipped', value: 'skipped' }, { text: 'Last Updated', value: 'updatedAt' }]), _ref;
   },
   mounted: function mounted() {
     // Test Cases
@@ -75938,7 +75933,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({
     show: 'dialog/createTestCaseDialog',
     baseUrl: 'extras/baseUrl',
-    testCaseTitle: 'testCase/test_case_title'
+    testCaseTitle: 'testCase/testCaseTitle'
   })
 });
 
@@ -76016,16 +76011,15 @@ var render = function() {
                               disabled: _vm.loading
                             },
                             model: {
-                              value: _vm.$store.state.testCase.test_case_title,
+                              value: _vm.$store.state.testCase.testCaseTitle,
                               callback: function($$v) {
                                 _vm.$set(
                                   _vm.$store.state.testCase,
-                                  "test_case_title",
+                                  "testCaseTitle",
                                   $$v
                                 )
                               },
-                              expression:
-                                "$store.state.testCase.test_case_title"
+                              expression: "$store.state.testCase.testCaseTitle"
                             }
                           })
                         ],
@@ -76067,7 +76061,7 @@ var render = function() {
                   attrs: { color: "primary", loading: _vm.loading },
                   on: {
                     click: function($event) {
-                      _vm.saveModuleName()
+                      _vm.saveTestCaseName()
                     }
                   }
                 },
@@ -76179,7 +76173,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76191,9 +76185,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-//
-//
-//
 //
 //
 //
@@ -76378,274 +76369,266 @@ var render = function() {
                   _c(
                     "v-layout",
                     { attrs: { row: "", wrap: "" } },
-                    [
-                      _vm._l(_vm.storeTestCases, function(item, i) {
-                        return _c(
-                          "v-flex",
-                          { key: i, attrs: { md12: "" } },
-                          [
-                            _c(
-                              "v-card",
-                              { staticClass: "pb-2" },
-                              [
-                                _c(
-                                  "v-toolbar",
-                                  {
-                                    attrs: {
-                                      dark: "",
-                                      card: "",
-                                      color: "primary"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "v-toolbar-title",
-                                      [
-                                        _c(
-                                          "v-flex",
-                                          {
-                                            staticClass: "text-md-center",
-                                            attrs: { md12: "" }
-                                          },
-                                          [
-                                            _c("h4", [
-                                              _vm._v(_vm._s(item.testCaseName))
-                                            ])
-                                          ]
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-title",
-                                  { staticClass: "pb-0 mb-0" },
-                                  [
-                                    _c(
-                                      "v-container",
-                                      {
-                                        staticClass: "ma-0 pa-0",
-                                        attrs: { fluid: "", "grid-list-md": "" }
-                                      },
-                                      [
-                                        _c(
-                                          "v-layout",
-                                          { attrs: { row: "", wrap: "" } },
-                                          [
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticClass: "text-md-center",
-                                                attrs: { md6: "" }
-                                              },
-                                              [
-                                                _c("h4", [
+                    _vm._l(_vm.storeTestCases, function(item, i) {
+                      return _c(
+                        "v-flex",
+                        { key: i, attrs: { md12: "" } },
+                        [
+                          _c(
+                            "v-card",
+                            { staticClass: "pb-2" },
+                            [
+                              _c(
+                                "v-toolbar",
+                                {
+                                  attrs: {
+                                    dark: "",
+                                    card: "",
+                                    color: "primary"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-toolbar-title",
+                                    [
+                                      _c(
+                                        "v-flex",
+                                        {
+                                          staticClass: "text-md-center",
+                                          attrs: { md12: "" }
+                                        },
+                                        [
+                                          _c("h4", [
+                                            _vm._v(_vm._s(item.testCaseName))
+                                          ])
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-card-title",
+                                { staticClass: "pb-0 mb-0" },
+                                [
+                                  _c(
+                                    "v-container",
+                                    {
+                                      staticClass: "ma-0 pa-0",
+                                      attrs: { fluid: "", "grid-list-md": "" }
+                                    },
+                                    [
+                                      _c(
+                                        "v-layout",
+                                        { attrs: { row: "", wrap: "" } },
+                                        [
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticClass: "text-md-center",
+                                              attrs: { md6: "" }
+                                            },
+                                            [
+                                              _c("h4", [
+                                                _vm._v(
+                                                  "Modules: " +
+                                                    _vm._s(item.modules)
+                                                )
+                                              ])
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticClass: "text-md-center",
+                                              attrs: { md6: "" }
+                                            },
+                                            [
+                                              _c("h4", [
+                                                _vm._v(
+                                                  "Scenarios: " +
+                                                    _vm._s(item.testScenarios)
+                                                )
+                                              ])
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticClass: "text-md-center",
+                                              attrs: { md4: "" }
+                                            },
+                                            [
+                                              _c(
+                                                "h5",
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: {
+                                                        small: "",
+                                                        color: "green"
+                                                      }
+                                                    },
+                                                    [_vm._v("check_circle")]
+                                                  ),
                                                   _vm._v(
-                                                    "Modules: " +
-                                                      _vm._s(item.modules)
+                                                    " Passed: " +
+                                                      _vm._s(item.passed) +
+                                                      "%"
                                                   )
-                                                ])
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticClass: "text-md-center",
-                                                attrs: { md6: "" }
-                                              },
-                                              [
-                                                _c("h4", [
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticClass: "text-md-center",
+                                              attrs: { md4: "" }
+                                            },
+                                            [
+                                              _c(
+                                                "h5",
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: {
+                                                        small: "",
+                                                        color: "red"
+                                                      }
+                                                    },
+                                                    [_vm._v("error")]
+                                                  ),
                                                   _vm._v(
-                                                    "Scenarios: " +
-                                                      _vm._s(item.testScenarios)
+                                                    " Failed: " +
+                                                      _vm._s(item.failed) +
+                                                      "%"
                                                   )
-                                                ])
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticClass: "text-md-center",
-                                                attrs: { md4: "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "h5",
-                                                  [
-                                                    _c(
-                                                      "v-icon",
-                                                      {
-                                                        attrs: {
-                                                          small: "",
-                                                          color: "green"
-                                                        }
-                                                      },
-                                                      [_vm._v("check_circle")]
-                                                    ),
-                                                    _vm._v(
-                                                      " Passed: " +
-                                                        _vm._s(item.passed) +
-                                                        "%"
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticClass: "text-md-center",
-                                                attrs: { md4: "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "h5",
-                                                  [
-                                                    _c(
-                                                      "v-icon",
-                                                      {
-                                                        attrs: {
-                                                          small: "",
-                                                          color: "red"
-                                                        }
-                                                      },
-                                                      [_vm._v("error")]
-                                                    ),
-                                                    _vm._v(
-                                                      " Failed: " +
-                                                        _vm._s(item.failed) +
-                                                        "%"
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticClass: "text-md-center",
-                                                attrs: { md4: "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "h5",
-                                                  [
-                                                    _c(
-                                                      "v-icon",
-                                                      {
-                                                        attrs: {
-                                                          small: "",
-                                                          color: "blue"
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "play_circle_filled"
-                                                        )
-                                                      ]
-                                                    ),
-                                                    _vm._v(
-                                                      " Skipped: " +
-                                                        _vm._s(item.skipped) +
-                                                        "%"
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticClass: "text-md-center",
-                                                attrs: { md6: "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "h5",
-                                                  [
-                                                    _c(
-                                                      "v-icon",
-                                                      {
-                                                        attrs: {
-                                                          small: "",
-                                                          color: "yellow"
-                                                        }
-                                                      },
-                                                      [_vm._v("access_time")]
-                                                    ),
-                                                    _vm._v(
-                                                      " Created: " +
-                                                        _vm._s(item.createdAt)
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-flex",
-                                              {
-                                                staticClass: "text-md-center",
-                                                attrs: { md6: "" }
-                                              },
-                                              [
-                                                _c(
-                                                  "h5",
-                                                  [
-                                                    _c(
-                                                      "v-icon",
-                                                      {
-                                                        attrs: {
-                                                          small: "",
-                                                          color: "yellow"
-                                                        }
-                                                      },
-                                                      [_vm._v("restore")]
-                                                    ),
-                                                    _vm._v(
-                                                      " Last Updated: " +
-                                                        _vm._s(item.updatedAt)
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }),
-                      _vm._v(" "),
-                      _c("v-flex", {
-                        staticClass: "text-md-center ma-0 pa-0",
-                        attrs: { md12: "" }
-                      })
-                    ],
-                    2
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticClass: "text-md-center",
+                                              attrs: { md4: "" }
+                                            },
+                                            [
+                                              _c(
+                                                "h5",
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: {
+                                                        small: "",
+                                                        color: "blue"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "play_circle_filled"
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(
+                                                    " Skipped: " +
+                                                      _vm._s(item.skipped) +
+                                                      "%"
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticClass: "text-md-center",
+                                              attrs: { md6: "" }
+                                            },
+                                            [
+                                              _c(
+                                                "h5",
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: {
+                                                        small: "",
+                                                        color: "yellow"
+                                                      }
+                                                    },
+                                                    [_vm._v("access_time")]
+                                                  ),
+                                                  _vm._v(
+                                                    " Created: " +
+                                                      _vm._s(item.createdAt)
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-flex",
+                                            {
+                                              staticClass: "text-md-center",
+                                              attrs: { md6: "" }
+                                            },
+                                            [
+                                              _c(
+                                                "h5",
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    {
+                                                      attrs: {
+                                                        small: "",
+                                                        color: "yellow"
+                                                      }
+                                                    },
+                                                    [_vm._v("restore")]
+                                                  ),
+                                                  _vm._v(
+                                                    " Last Updated: " +
+                                                      _vm._s(item.updatedAt)
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    })
                   )
                 ],
                 1
@@ -76729,7 +76712,7 @@ var render = function() {
         [
           _c(
             "v-flex",
-            { attrs: { md8: "" } },
+            { attrs: { md12: "" } },
             [
               _c(
                 "v-card",
@@ -76758,6 +76741,18 @@ var render = function() {
                           }
                         },
                         [_c("v-icon", [_vm._v("refresh")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        { attrs: { flat: "" } },
+                        [
+                          _vm._v("Download"),
+                          _c("v-icon", { attrs: { right: "" } }, [
+                            _vm._v("cloud_download")
+                          ])
+                        ],
                         1
                       ),
                       _vm._v(" "),
@@ -77071,6 +77066,16 @@ var render = function() {
                                           { staticClass: "text-xs-center" },
                                           [
                                             _vm._v(
+                                              _vm._s(props.item.testScenarios)
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          { staticClass: "text-xs-center" },
+                                          [
+                                            _vm._v(
                                               _vm._s(props.item.passed) + "%"
                                             )
                                           ]
@@ -77094,6 +77099,12 @@ var render = function() {
                                               _vm._s(props.item.skipped) + "%"
                                             )
                                           ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          { staticClass: "text-xs-center" },
+                                          [_vm._v(_vm._s(props.item.updatedAt))]
                                         )
                                       ]
                                     )
@@ -77145,49 +77156,6 @@ var render = function() {
                       1
                     )
                   ])
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-flex",
-            { attrs: { md4: "" } },
-            [
-              _c(
-                "v-card",
-                [
-                  _c(
-                    "v-toolbar",
-                    { attrs: { dark: "", card: "", color: "primary" } },
-                    [_c("v-toolbar-title", [_vm._v("Templates")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "full-width",
-                          attrs: { color: "primary" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Download XLS Template"
-                          ),
-                          _c("v-icon", { attrs: { right: "" } }, [
-                            _vm._v("cloud_download")
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
                 ],
                 1
               )
@@ -77303,7 +77271,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77319,6 +77287,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_dialog_CreateModuleDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__includes_dialog_CreateModuleDialog__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__includes_dialog_DeleteModuleDialog__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__includes_dialog_DeleteModuleDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__includes_dialog_DeleteModuleDialog__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__includes_dialog_RenameTestCaseTitleDialog__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__includes_dialog_RenameTestCaseTitleDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__includes_dialog_RenameTestCaseTitleDialog__);
 //
 //
 //
@@ -77452,6 +77422,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+
+
 
 
 
@@ -77459,7 +77433,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     CreateModuleDialog: __WEBPACK_IMPORTED_MODULE_1__includes_dialog_CreateModuleDialog___default.a,
-    DeleteModuleDialog: __WEBPACK_IMPORTED_MODULE_2__includes_dialog_DeleteModuleDialog___default.a
+    DeleteModuleDialog: __WEBPACK_IMPORTED_MODULE_2__includes_dialog_DeleteModuleDialog___default.a,
+    RenameTestCaseTitleDialog: __WEBPACK_IMPORTED_MODULE_3__includes_dialog_RenameTestCaseTitleDialog___default.a
   },
   data: function data() {
     return {
@@ -77476,6 +77451,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     var _this = this;
 
+    this.$store.commit('testCase/setTestCaseTitle', { title: this.$cookies.get('testCaseTitle') });
     axios.post(this.baseUrl + 'api/module/getlatestid', {
       testCaseId: this.$cookies.get('testCaseId')
     }).then(function (res) {
@@ -77492,6 +77468,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: {
+    editName: function editName() {
+      this.$store.commit('dialog/showDialog', { dialog: "renameTestCaseDialog" });
+    },
     openCreateModuleDialog: function openCreateModuleDialog() {
       this.$store.commit('dialog/showDialog', { dialog: "createModuleDialog" });
     },
@@ -77559,6 +77538,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({
     baseUrl: 'extras/baseUrl',
     testCaseId: 'testCase/testCaseId',
+    testCaseTitle: 'testCase/testCaseTitle',
     moduleName: 'module/moduleName',
     storeModules: 'module/modules'
   })
@@ -77947,7 +77927,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77959,6 +77939,26 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -78025,9 +78025,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     storeModules: function storeModules(newStoreModules, oldStoreModules) {
       if (this.storeModules.length > 1) {
-        this.toolbar_title = "Are you sure to delete these Modules?";
+        this.toolbar_title = "Are you sure you want to delete these Modules?";
       } else {
-        this.toolbar_title = "Are you sure to delete this Module?";
+        this.toolbar_title = "Are you sure you want to delete this Module?";
       }
     }
   },
@@ -78078,7 +78078,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-dialog",
-    { attrs: { value: _vm.show, persistent: "", "max-width": "500" } },
+    { attrs: { value: _vm.show, persistent: "", "max-width": "600" } },
     [
       _c(
         "v-card",
@@ -78106,7 +78106,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-card-title",
-            { staticClass: "pb-0 mb-0" },
+            {
+              staticClass: "pa-0 mb-0",
+              staticStyle: { height: "400px", overflow: "auto" }
+            },
             [
               _c(
                 "v-container",
@@ -78118,35 +78121,171 @@ var render = function() {
                   _c(
                     "v-layout",
                     { attrs: { row: "", wrap: "" } },
-                    [
-                      _vm._l(_vm.storeModules, function(item, i) {
-                        return _c(
-                          "v-flex",
-                          { key: i, attrs: { md12: "" } },
-                          [
-                            _c(
-                              "v-card",
-                              [
-                                _c("v-card-title", [
-                                  _c("h4", [_vm._v(_vm._s(item.moduleName))])
-                                ])
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }),
-                      _vm._v(" "),
-                      _c("v-flex", { attrs: { md12: "" } }, [
-                        _c("h4", { staticClass: "red--text" }, [
-                          _vm._v(
-                            "Note: This will delete all the Test Scenarios inside."
+                    _vm._l(_vm.storeModules, function(item, i) {
+                      return _c(
+                        "v-flex",
+                        { key: i, attrs: { md12: "" } },
+                        [
+                          _c(
+                            "v-card",
+                            { staticClass: "pb-2" },
+                            [
+                              _c(
+                                "v-toolbar",
+                                {
+                                  attrs: {
+                                    dark: "",
+                                    card: "",
+                                    color: "primary"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-toolbar-title",
+                                    [
+                                      _c(
+                                        "v-flex",
+                                        {
+                                          staticClass: "text-md-center",
+                                          attrs: { md12: "" }
+                                        },
+                                        [
+                                          _c("h4", [
+                                            _vm._v(_vm._s(item.moduleName))
+                                          ])
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-card-title",
+                                { staticClass: "pb-0 mb-0" },
+                                [
+                                  _c(
+                                    "v-container",
+                                    {
+                                      staticClass: "ma-0 pa-0",
+                                      attrs: { fluid: "", "grid-list-md": "" }
+                                    },
+                                    [
+                                      _c(
+                                        "v-layout",
+                                        { attrs: { row: "", wrap: "" } },
+                                        [
+                                          _c(
+                                            "v-flex",
+                                            { attrs: { md12: "" } },
+                                            [
+                                              _c(
+                                                "h4",
+                                                {
+                                                  staticClass: "text-md-center"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "Test Scenarios: " +
+                                                      _vm._s(item.scenarios)
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("v-flex", { attrs: { md4: "" } }, [
+                                            _c(
+                                              "h5",
+                                              { staticClass: "text-md-center" },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  {
+                                                    attrs: {
+                                                      small: "",
+                                                      color: "green"
+                                                    }
+                                                  },
+                                                  [_vm._v("check_circle")]
+                                                ),
+                                                _vm._v(
+                                                  " Passed: " +
+                                                    _vm._s(item.passed) +
+                                                    "%"
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("v-flex", { attrs: { md4: "" } }, [
+                                            _c(
+                                              "h5",
+                                              { staticClass: "text-md-center" },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  {
+                                                    attrs: {
+                                                      small: "",
+                                                      color: "red"
+                                                    }
+                                                  },
+                                                  [_vm._v("error")]
+                                                ),
+                                                _vm._v(
+                                                  " Failed: " +
+                                                    _vm._s(item.failed) +
+                                                    "%"
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("v-flex", { attrs: { md4: "" } }, [
+                                            _c(
+                                              "h5",
+                                              { staticClass: "text-md-center" },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  {
+                                                    attrs: {
+                                                      small: "",
+                                                      color: "blue"
+                                                    }
+                                                  },
+                                                  [_vm._v("play_circle_filled")]
+                                                ),
+                                                _vm._v(
+                                                  " Skipped: " +
+                                                    _vm._s(item.skipped) +
+                                                    "%"
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
                           )
-                        ])
-                      ])
-                    ],
-                    2
+                        ],
+                        1
+                      )
+                    })
                   )
                 ],
                 1
@@ -78155,42 +78294,41 @@ var render = function() {
             1
           ),
           _vm._v(" "),
+          _c("v-divider"),
+          _vm._v(" "),
           _c(
             "v-card-actions",
             [
+              _c("h5", { staticClass: "pl-1 red--text" }, [
+                _vm._v("Note: This will delete all the Test Scenarios inside.")
+              ]),
+              _vm._v(" "),
               _c("v-spacer"),
               _vm._v(" "),
               _c(
-                "v-flex",
-                { staticClass: "ma-1" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "primary", loading: _vm.loading },
-                      on: {
-                        click: function($event) {
-                          _vm.deleteAll()
-                        }
-                      }
-                    },
-                    [_vm._v("\n          Delete\n        ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "primary" },
-                      on: {
-                        click: function($event) {
-                          _vm.exit()
-                        }
-                      }
-                    },
-                    [_vm._v("\n          Dismiss\n      ")]
-                  )
-                ],
-                1
+                "v-btn",
+                {
+                  attrs: { flat: "", color: "primary" },
+                  on: {
+                    click: function($event) {
+                      _vm.exit()
+                    }
+                  }
+                },
+                [_vm._v("\n        Dismiss\n      ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "primary", loading: _vm.loading },
+                  on: {
+                    click: function($event) {
+                      _vm.deleteAll()
+                    }
+                  }
+                },
+                [_vm._v("\n        Delete\n      ")]
               )
             ],
             1
@@ -78239,13 +78377,24 @@ var render = function() {
                     { attrs: { dark: "", card: "", color: "primary" } },
                     [
                       _c("v-toolbar-title", [
-                        _vm._v(
-                          _vm._s(_vm.$cookies.get("testCaseTitle")) +
-                            " - Modules"
-                        )
+                        _vm._v(_vm._s(_vm.testCaseTitle) + " - Modules")
                       ]),
                       _vm._v(" "),
                       _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mb-2",
+                          attrs: { flat: "", dark: "", loading: _vm.loading },
+                          on: {
+                            click: function($event) {
+                              _vm.editName()
+                            }
+                          }
+                        },
+                        [_vm._v("Edit Name")]
+                      ),
                       _vm._v(" "),
                       _c(
                         "v-btn",
@@ -78641,7 +78790,9 @@ var render = function() {
       _vm._v(" "),
       _c("create-module-dialog"),
       _vm._v(" "),
-      _c("delete-module-dialog")
+      _c("delete-module-dialog"),
+      _vm._v(" "),
+      _c("rename-test-case-title-dialog")
     ],
     1
   )
@@ -79518,7 +79669,8 @@ var state = {
     "createTestCaseDialog": false,
     "deleteTestCaseDialog": false,
     "createModuleDialog": false,
-    "deleteModuleDialog": false
+    "deleteModuleDialog": false,
+    "renameTestCaseDialog": false
   }
 
   // getters
@@ -79537,6 +79689,9 @@ var state = {
   },
   deleteModuleDialog: function deleteModuleDialog(state) {
     return state.showDialog.deleteModuleDialog;
+  },
+  renameTestCaseDialog: function renameTestCaseDialog(state) {
+    return state.showDialog.renameTestCaseDialog;
   }
 
   // actions
@@ -79786,6 +79941,9 @@ var state = {
         state.text = payload.text;
         state.icon = "warning";
         state.color = "red";
+    },
+    hideSnack: function hideSnack(state) {
+        state.show = false;
     }
 };
 
@@ -79803,7 +79961,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // initial state
 var state = {
   testCase: [],
-  test_case_title: 'Test Case #',
+  testCaseTitle: 'Test Case #',
   testCaseId: ''
 
   // getters
@@ -79811,8 +79969,8 @@ var state = {
   testCase: function testCase(state) {
     return state.testCase;
   },
-  test_case_title: function test_case_title(state) {
-    return state.test_case_title;
+  testCaseTitle: function testCaseTitle(state) {
+    return state.testCaseTitle;
   },
   testCaseId: function testCaseId(state) {
     return state.testCaseId;
@@ -79839,7 +79997,7 @@ var state = {
     state.testCase = payload.testCase;
   },
   setTestCaseTitle: function setTestCaseTitle(state, payload) {
-    state.test_case_title = payload.title;
+    state.testCaseTitle = payload.title;
   },
   setTestCaseId: function setTestCaseId(state, payload) {
     state.testCaseId = payload.testCaseId;
@@ -79949,8 +80107,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_Toolbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__includes_Toolbar__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__includes_Snackbar__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__includes_Snackbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__includes_Snackbar__);
-//
-//
 //
 //
 //
@@ -80661,6 +80817,369 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(127)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(129)
+/* template */
+var __vue_template__ = __webpack_require__(130)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/includes/dialog/RenameTestCaseTitleDialog.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3d786bbb", Component.options)
+  } else {
+    hotAPI.reload("data-v-3d786bbb", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(128);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("8935ef56", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3d786bbb\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RenameTestCaseTitleDialog.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3d786bbb\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RenameTestCaseTitleDialog.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 129 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'RenameTestCaseTitleDialog',
+  data: function data() {
+    return {
+      loading: false,
+      testCaseTitleError: []
+    };
+  },
+  mounted: function mounted() {
+    this.$store.commit('testCase/setTestCaseTitle', { title: this.$cookies.get('testCaseTitle') });
+  },
+
+  methods: {
+    closeEditTestCaseDialog: function closeEditTestCaseDialog() {
+      this.$store.commit('dialog/closeDialog', { dialog: "renameTestCaseDialog" });
+    },
+    saveTestCaseName: function saveTestCaseName() {
+      var _this = this;
+
+      this.loading = true;
+      this.testCaseTitleError = [];
+      axios.post(this.baseUrl + 'api/testcase/edit', {
+        testCaseTitle: this.testCaseTitle,
+        testCaseId: this.$cookies.get('testCaseId')
+      }).then(function (res) {
+        _this.loading = false;
+        if (res.data.status) {
+          _this.$cookies.set('testCaseTitle', _this.testCaseTitle);
+
+          _this.closeEditTestCaseDialog();
+
+          _this.$store.commit('testCase/setTestCaseTitle', { title: _this.testCaseTitle });
+
+          _this.$store.commit('snackbar/showSnack', {
+            "text": " Test Case rename successfully",
+            "icon": "info",
+            "color": "green"
+          });
+        } else if (res.data.status == 0) {
+          _this.testCaseTitleError = res.data.error;
+        } else {
+          _this.$store.commit('snackbar/showError', { "text": "Http Error!" });
+        }
+      }).catch(function (e) {
+        _this.loading = false;
+        _this.$store.commit('snackbar/showError', { "text": "Internal Server Error!" });
+      });
+    }
+  },
+  computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({
+    show: 'dialog/renameTestCaseDialog',
+    baseUrl: 'extras/baseUrl',
+    testCaseTitle: 'testCase/testCaseTitle'
+  })
+});
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    { attrs: { value: _vm.show, persistent: "", "max-width": "500" } },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-toolbar",
+            { attrs: { dark: "", card: "", color: "primary" } },
+            [
+              _c("v-icon", [_vm._v("insert_drive_file")]),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v("Rename Test Case")]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.closeEditTestCaseDialog()
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("close")])],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-progress-linear", {
+            staticClass: "ma-0",
+            attrs: {
+              indeterminate: true,
+              height: "3",
+              color: "secondary lighten-1",
+              active: _vm.loading
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "v-card-title",
+            { staticClass: "pb-0 mb-0" },
+            [
+              _c(
+                "v-form",
+                { staticClass: "full-width" },
+                [
+                  _c(
+                    "v-container",
+                    { attrs: { fluid: "", "grid-list-md": "" } },
+                    [
+                      _c(
+                        "v-layout",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Test Case Title",
+                              "error-messages": _vm.testCaseTitleError,
+                              disabled: _vm.loading
+                            },
+                            model: {
+                              value: _vm.$store.state.testCase.testCaseTitle,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.$store.state.testCase,
+                                  "testCaseTitle",
+                                  $$v
+                                )
+                              },
+                              expression: "$store.state.testCase.testCaseTitle"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-divider"),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "primary", flat: "", loading: _vm.loading },
+                  on: {
+                    click: function($event) {
+                      _vm.closeEditTestCaseDialog()
+                    }
+                  }
+                },
+                [_vm._v("\n        Dismiss\n      ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "primary", loading: _vm.loading },
+                  on: {
+                    click: function($event) {
+                      _vm.saveTestCaseName()
+                    }
+                  }
+                },
+                [_vm._v("\n        Save\n      ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3d786bbb", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

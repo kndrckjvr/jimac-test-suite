@@ -33,10 +33,11 @@ router.beforeEach((to, from, next) => {
         }
     }
 })
-
+document.getElementById('loading').style.display = 'inline-block'
 axios.post(store.state.extras.baseUrl + 'api/sessioncheck', {
     token: VueCookies.isKey('token') ? VueCookies.get('token') : ''
 }).then((res) => {
+    document.getElementById('loading').style.display = 'none'
     if(!res.data.status) {
         // Add Error message
         return

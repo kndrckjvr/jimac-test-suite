@@ -2,14 +2,14 @@
 // initial state
 export const state = { 
   testCase: [],
-  test_case_title: 'Test Case #',
+  testCaseTitle: 'Test Case #',
   testCaseId: ''
 }
 
 // getters
 export const getters = {
   testCase: state => state.testCase,
-  test_case_title: state => state.test_case_title,
+  testCaseTitle: state => state.testCaseTitle,
   testCaseId: state => state.testCaseId
 }
 
@@ -26,7 +26,7 @@ export const mutations = {
     state.testCase = payload.testCase
   },
   setTestCaseTitle(state, payload) {
-    state.test_case_title = payload.title
+    state.testCaseTitle = payload.title
   },
   setTestCaseId(state, payload) {
     state.testCaseId = payload.testCaseId

@@ -1,8 +1,6 @@
 <template>
     <v-app>
-        <!-- <v-navigation-drawer app></v-navigation-drawer> -->
         <navigation></navigation>
-        <!-- <v-toolbar app></v-toolbar> -->
         <toolbar></toolbar>
             <v-content>
                 <v-container fluid>

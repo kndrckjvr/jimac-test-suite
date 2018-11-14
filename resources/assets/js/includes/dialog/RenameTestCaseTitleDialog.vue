@@ -6,9 +6,9 @@
     <v-card>
       <v-toolbar dark card color="primary">
         <v-icon>insert_drive_file</v-icon>
-        <v-toolbar-title>Create Test Case</v-toolbar-title>
+        <v-toolbar-title>Rename Test Case</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="closeCreateTestCaseDialog()">
+        <v-btn icon @click="closeEditTestCaseDialog()">
             <v-icon>close</v-icon>
         </v-btn>
       </v-toolbar>
@@ -38,7 +38,7 @@
           color="primary"
           flat
           :loading="loading"
-          @click="closeDialog()">
+          @click="closeEditTestCaseDialog()">
           Dismiss
         </v-btn>
         <v-btn
@@ -53,35 +53,40 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
-  name: 'CreateTestCaseDialog', 
+  name: 'RenameTestCaseTitleDialog', 
   data: () => ({
     loading: false,
     testCaseTitleError: []
   }),
+  mounted() {
+    this.$store.commit('testCase/setTestCaseTitle', {title : this.$cookies.get('testCaseTitle')})
+  },
   methods: {
-    closeCreateTestCaseDialog() {
-      this.$store.commit('dialog/closeDialog', {dialog: "createTestCaseDialog"})
+    closeEditTestCaseDialog() {
+      this.$store.commit('dialog/closeDialog', {dialog: "renameTestCaseDialog"})
     },
     saveTestCaseName() {
       this.loading = true
       this.testCaseTitleError = []
-      axios.post(this.baseUrl+'api/testcase/create',{
+      axios.post(this.baseUrl+'api/testcase/edit',{
         testCaseTitle: this.testCaseTitle,
-        token: this.$cookies.get('token')
+        testCaseId: this.$cookies.get('testCaseId')
       }).then((res) => {
         this.loading = false
         if(res.data.status) {
           this.$cookies.set('testCaseTitle', this.testCaseTitle)
-          this.$cookies.set('testCaseId', res.data.testCaseId)
 
-          this.closeCreateTestCaseDialog()
+          this.closeEditTestCaseDialog()
 
           this.$store.commit('testCase/setTestCaseTitle', {title: this.testCaseTitle})
-          this.$store.commit('testCase/setTestCaseId', {testCaseId: res.data.testCaseId})
 
-          this.$router.push('/module')
+          this.$store.commit('snackbar/showSnack', {
+            "text" : " Test Case rename successfully", 
+            "icon" : "info", 
+            "color" : "green"
+          })
         } else if(res.data.status == 0) {
           this.testCaseTitleError = res.data.error
         } else {
@@ -94,7 +99,7 @@ export default {
     }
   },
   computed: mapGetters({
-    show: 'dialog/createTestCaseDialog',
+    show: 'dialog/renameTestCaseDialog',
     baseUrl: 'extras/baseUrl',
     testCaseTitle: 'testCase/testCaseTitle'
   })

@@ -55,9 +55,6 @@
                 </v-card-title>
               </v-card>
             </v-flex>
-            <v-flex md12 class="text-md-center ma-0 pa-0">
-              
-            </v-flex>
           </v-layout>
         </v-container>
       </v-card-title>
