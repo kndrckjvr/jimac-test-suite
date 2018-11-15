@@ -38,6 +38,14 @@ class ModuleController extends Controller
         ]);
     }
 
+    public function editModule(Request $request) {
+        $module = Module::find($request->input('moduleId'));
+        $module->module_name = $request->input('moduleName');
+
+        if($module->save()) return response()->json(['status' => 1]);
+        else return response()->json(['status' => 0]);
+    }
+
     public function deleteModule(Request $request) {
         foreach($request->input('moduleId') as $id) {
             Module::where('id', $id)->delete();

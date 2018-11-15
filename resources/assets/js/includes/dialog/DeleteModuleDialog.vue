@@ -100,7 +100,7 @@ export default {
       }).then((res) => {
         if(res.data.status) {      
           axios.post(this.baseUrl + 'api/module/getlatestid', {
-            testCaseId: this.testCaseId
+            testCaseId: this.$cookies.get('testCaseId')
           }).then((res) => {
             this.$store.commit('module/setModuleName', { moduleName : "Module #" + res.data.moduleId })
           }).catch((e) => {

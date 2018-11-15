@@ -6,9 +6,9 @@
     <v-card>
       <v-toolbar dark card color="primary">
         <v-icon>description</v-icon>
-        <v-toolbar-title>Create Module</v-toolbar-title>
+        <v-toolbar-title>Rename Module</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="closeDialog()">
+        <v-btn icon @click="closeRenameModuleNameDialog()">
             <v-icon>close</v-icon>
         </v-btn>
       </v-toolbar>
@@ -38,13 +38,13 @@
           color="primary"
           flat
           :loading="loading"
-          @click="closeDialog()">
+          @click="closeRenameModuleNameDialog()">
           Dismiss
         </v-btn>
         <v-btn
           color="primary"
           :loading="loading"
-          @click="saveModuleName()" >
+          @click="renameModuleName()" >
           Save
         </v-btn>
       </v-card-actions>
@@ -53,42 +53,54 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
-  name: 'CreateModuleDialog',
+  name: 'RenameModuleDialog', 
   data: () => ({
     loading: false,
     moduleNameError: []
   }),
+  mounted() {
+    this.$store.commit('testCase/setTestCaseTitle', {title : this.$cookies.get('testCaseTitle')})
+  },
   methods: {
-    closeDialog() {
-      this.$store.commit('dialog/closeDialog', {dialog:"createModuleDialog"})
+    closeRenameModuleNameDialog() {
+      this.$store.commit('dialog/closeDialog', {dialog: "renameModuleDialog"})
     },
-    saveModuleName() {
+    renameModuleName() {
       this.loading = true
       this.moduleNameError = []
-      axios.post(this.baseUrl + 'api/module/create',{
-        testCaseId: this.$cookies.get('testCaseId'),
-        moduleName: this.moduleName
+      axios.post(this.baseUrl+'api/module/edit',{
+        moduleName: this.moduleName,
+        moduleId: this.$cookies.get('moduleId')
       }).then((res) => {
         this.loading = false
         if(res.data.status) {
-          this.closeDialog()
+          
+          this.$cookies.set('moduleName', this.moduleName)
 
-          this.$store.commit('module/setModules', {modules : res.data.modules})
+          this.closeRenameModuleNameDialog()
 
-          this.$router.push('/testscenario')
+          this.$store.commit('module/setModuleName', {moduleName: this.moduleName})
+
+          this.$store.commit('snackbar/showSnack', {
+            "text" : "Module renamed successfully", 
+            "icon" : "info", 
+            "color" : "green"
+          })
+        } else if(res.data.status == 0) {
+          this.testCaseTitleError = res.data.error
         } else {
-          this.moduleNameError = res.data.error
+          this.$store.commit('snackbar/showError', { "text" : "Http Error!" })
         }
       }).catch((e) => {
         this.loading = false
-        this.$store.commit('snackbar/showError', { "text" : "Internal Server Error!" })
+        this.$store.commit('snackbar/showError', { "text":"Internal Server Error!" })
       })
     }
   },
   computed: mapGetters({
-    show: 'dialog/createModuleDialog',
+    show: 'dialog/renameModuleDialog',
     baseUrl: 'extras/baseUrl',
     moduleName: 'module/moduleName'
   })

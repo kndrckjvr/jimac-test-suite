@@ -2,22 +2,19 @@
 // initial state
 export const state = { 
   testCase: [],
-  testCaseTitle: 'Test Case #',
-  testCaseId: ''
+  testCaseTitle: 'Test Case #'
 }
 
 // getters
 export const getters = {
   testCase: state => state.testCase,
-  testCaseTitle: state => state.testCaseTitle,
-  testCaseId: state => state.testCaseId
+  testCaseTitle: state => state.testCaseTitle
 }
 
 // actions
 export const actions = {
   setTestCase: ({commit}) => commit('setTestCase', payload),
-  setTestCaseTitle: ({commit}) => commit('setTestCaseTitle', payload),
-  setTestCaseId: ({commit}) => commit('setTestCaseId', payload)
+  setTestCaseTitle: ({commit}) => commit('setTestCaseTitle', payload)
 }
 
 // mutations
@@ -27,8 +24,5 @@ export const mutations = {
   },
   setTestCaseTitle(state, payload) {
     state.testCaseTitle = payload.title
-  },
-  setTestCaseId(state, payload) {
-    state.testCaseId = payload.testCaseId
   }
 }

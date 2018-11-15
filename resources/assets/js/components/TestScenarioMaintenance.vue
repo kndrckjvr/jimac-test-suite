@@ -4,8 +4,9 @@
       <v-flex md12>
         <v-card>
           <v-toolbar dark card color="primary">
-            <v-toolbar-title>{{ $cookies.get('moduleName') }} - Test Scenario</v-toolbar-title>
+            <v-toolbar-title>{{ $store.state.module.moduleName }} - Test Scenario</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn flat :loading="loading" @click="editModuleName()" class="mb-2">Edit Name</v-btn>
             <v-btn icon color="primary" :loading="loading" @click="refresh()" class="mb-2"><v-icon>refresh</v-icon></v-btn>
           </v-toolbar>
           <v-card-title>
@@ -121,20 +122,20 @@
         right
         fab
         to="/module" >
-        <v-icon>build</v-icon>
+        <v-icon>description</v-icon>
       </v-btn>
       <span>Back to Module Maintenance</span>
     </v-tooltip>
-    <!-- <create-module-dialog></create-module-dialog> -->
+    <rename-module-dialog></rename-module-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import CreateModuleDialog from '../includes/dialog/CreateModuleDialog';
+import RenameModuleDialog from '../includes/dialog/RenameModuleDialog';
 export default {
   components: {
-    CreateModuleDialog
+    RenameModuleDialog
   },
   data: () => ({
     loading: true,
@@ -152,11 +153,15 @@ export default {
     selected: []
   }),
   mounted() {
+    this.$store.commit('module/setModuleName', {moduleName: this.$cookies.get('moduleName')})
     this.getData()
   },
   methods: {
-    openCreateModuleDialog() {
-      this.$store.commit('dialog/showDialog', { dialog : "createModuleDialog" })
+    editModuleName() {
+      this.$store.commit('dialog/showDialog', { dialog : "renameModuleDialog" })
+    },
+    openCreateScenarioDialog() {
+      
     },
     refresh() {
       this.getData()
@@ -192,7 +197,8 @@ export default {
     }
   },
   computed: mapGetters({
-    baseUrl: 'extras/baseUrl'
+    baseUrl: 'extras/baseUrl',
+    moduleName: 'module/moduleName'
   })
 }
 </script>

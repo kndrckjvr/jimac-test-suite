@@ -9,7 +9,7 @@ export const state = {
         },
         {
             title: 'Test Case Maintenance',
-            icon: 'build',
+            icon: 'insert_drive_file',
             to: '/testcase',
             auth: [1, 2]
         },

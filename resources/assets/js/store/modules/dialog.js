@@ -5,7 +5,8 @@ export const state = {
     "deleteTestCaseDialog": false,
     "createModuleDialog": false,
     "deleteModuleDialog": false,
-    "renameTestCaseDialog": false
+    "renameTestCaseDialog": false,
+    "renameModuleDialog": false
   }
 }
 
@@ -17,6 +18,7 @@ export const getters = {
   createModuleDialog: state => state.showDialog.createModuleDialog,
   deleteModuleDialog: state => state.showDialog.deleteModuleDialog,
   renameTestCaseDialog: state => state.showDialog.renameTestCaseDialog,
+  renameModuleDialog: state => state.showDialog.renameModuleDialog,
 }
 
 // actions

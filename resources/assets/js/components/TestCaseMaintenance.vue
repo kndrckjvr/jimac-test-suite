@@ -206,7 +206,6 @@ export default {
         //multiple edit
       } else {
         this.$store.commit('testCase/setTestCaseTitle', {'testCase':this.selected[0].testCaseName})
-        this.$store.commit('testCase/setTestCaseId', {'testCase':this.selected[0].testCaseId})
         
         this.$cookies.set('testCaseTitle', this.selected[0].testCaseName)
         this.$cookies.set('testCaseId', this.selected[0].testCaseId)

@@ -102,7 +102,6 @@ export default {
       for(var testCase in this.storeTestCases) {
         testCaseId.push(this.storeTestCases[testCase].testCaseId)
       }
-      console.log(testCaseId)
       axios.post(this.baseUrl + 'api/testcase/delete',{
         testCaseId: testCaseId
       }).then((res) => {

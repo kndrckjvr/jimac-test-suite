@@ -79,7 +79,6 @@ export default {
           this.closeCreateTestCaseDialog()
 
           this.$store.commit('testCase/setTestCaseTitle', {title: this.testCaseTitle})
-          this.$store.commit('testCase/setTestCaseId', {testCaseId: res.data.testCaseId})
 
           this.$router.push('/module')
         } else if(res.data.status == 0) {

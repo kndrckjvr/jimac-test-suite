@@ -2,14 +2,13 @@
   <v-dialog
     :value="show"
     persistent
-    scrollable
     max-width="500">
     <v-card>
       <v-toolbar dark card color="primary">
         <v-icon>insert_drive_file</v-icon>
-        <v-toolbar-title>Create Test Case</v-toolbar-title>
+        <v-toolbar-title>Rename Test Case</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="closeCreateTestScenarioDialog()">
+        <v-btn icon @click="renameTestCaseTitle()">
             <v-icon>close</v-icon>
         </v-btn>
       </v-toolbar>
@@ -20,25 +19,32 @@
         color="secondary lighten-1"
         :active="loading" />
       <v-card-title class="pb-0 mb-0">
-        <v-container fluid grid-list-md>
-          <v-layout>
-            <v-flex >
-
-            </v-flex>
-            <v-text-field
-              label="Test Case Title"
-              :error-messages="testCaseTitleError"
-              :disabled="loading"
-              v-model="$store.state.testCase.testCaseTitle" />
-          </v-layout>
-        </v-container>
+        <v-form class="full-width">
+          <v-container fluid grid-list-md>
+            <v-layout>
+              <v-text-field
+                label="Test Case Title"
+                :error-messages="testCaseTitleError" 
+                :disabled="loading"
+                v-model="$store.state.testCase.testCaseTitle" />
+            </v-layout>
+          </v-container>
+        </v-form>
       </v-card-title>
+      <v-divider></v-divider>
       <v-card-actions>
+        <v-spacer></v-spacer>
         <v-btn
           color="primary"
-          class="full-width"
+          flat
           :loading="loading"
-          @click="saveTestCaseName()" >
+          @click="renameTestCaseTitle()">
+          Dismiss
+        </v-btn>
+        <v-btn
+          color="primary"
+          :loading="loading"
+          @click="saveTestCaseTitle()" >
           Save
         </v-btn>
       </v-card-actions>
@@ -47,35 +53,40 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
-  name: 'CreateTestCaseDialog', 
+  name: 'RenameTestCaseDialog', 
   data: () => ({
     loading: false,
     testCaseTitleError: []
   }),
+  mounted() {
+    this.$store.commit('testCase/setTestCaseTitle', {title : this.$cookies.get('testCaseTitle')})
+  },
   methods: {
-    closeCreateTestScenarioDialog() {
-      this.$store.commit('dialog/closeDialog', {dialog: "createTestScenario"})
+    renameTestCaseTitle() {
+      this.$store.commit('dialog/closeDialog', {dialog: "renameTestCaseDialog"})
     },
-    saveTestCaseName() {
+    saveTestCaseTitle() {
       this.loading = true
       this.testCaseTitleError = []
-      axios.post(this.baseUrl+'api/testscenario/create',{
+      axios.post(this.baseUrl+'api/testcase/edit',{
         testCaseTitle: this.testCaseTitle,
-        token: this.$cookies.get('token')
+        testCaseId: this.$cookies.get('testCaseId')
       }).then((res) => {
         this.loading = false
         if(res.data.status) {
           this.$cookies.set('testCaseTitle', this.testCaseTitle)
-          this.$cookies.set('testCaseId', res.data.testCaseId)
 
-          this.closeCreateTestCaseDialog()
+          this.renameTestCaseTitle()
 
           this.$store.commit('testCase/setTestCaseTitle', {title: this.testCaseTitle})
-          this.$store.commit('testCase/setTestCaseId', {testCaseId: res.data.testCaseId})
 
-          this.$router.push('/module')
+          this.$store.commit('snackbar/showSnack', {
+            "text" : " Test Case renamed successfully", 
+            "icon" : "info", 
+            "color" : "green"
+          })
         } else if(res.data.status == 0) {
           this.testCaseTitleError = res.data.error
         } else {
@@ -88,7 +99,7 @@ export default {
     }
   },
   computed: mapGetters({
-    show: 'dialog/createTestCaseDialog',
+    show: 'dialog/renameTestCaseDialog',
     baseUrl: 'extras/baseUrl',
     testCaseTitle: 'testCase/testCaseTitle'
   })

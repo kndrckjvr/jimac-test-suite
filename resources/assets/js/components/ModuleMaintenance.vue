@@ -123,13 +123,13 @@
         right
         fab
         to="/testcase" >
-        <v-icon>build</v-icon>
+        <v-icon>insert_drive_file</v-icon>
       </v-btn>
       <span>Back to Test Case Maintenance</span>
     </v-tooltip>
     <create-module-dialog />
     <delete-module-dialog />
-    <rename-test-case-title-dialog/>
+    <rename-test-case-dialog/>
   </v-container>
 </template>
 
@@ -137,13 +137,13 @@
 import { mapGetters } from 'vuex';
 import CreateModuleDialog from '../includes/dialog/CreateModuleDialog';
 import DeleteModuleDialog from '../includes/dialog/DeleteModuleDialog';
-import RenameTestCaseTitleDialog from '../includes/dialog/RenameTestCaseTitleDialog';
+import RenameTestCaseDialog from '../includes/dialog/RenameTestCaseDialog';
 
 export default {
   components: {
     CreateModuleDialog,
     DeleteModuleDialog,
-    RenameTestCaseTitleDialog,
+    RenameTestCaseDialog,
   },
   data: () => ({
     loading: true,
@@ -195,7 +195,6 @@ export default {
         //multiple edit
       } else {
         this.$store.commit('module/setModules', {'modules':this.selected[0].moduleName})
-        this.$store.commit('module/setModuleId', {'moduleId':this.selected[0].moduleId})
         
         this.$cookies.set('moduleName', this.selected[0].moduleName)
         this.$cookies.set('moduleId', this.selected[0].moduleId)
@@ -247,7 +246,6 @@ export default {
   },
   computed: mapGetters({
     baseUrl: 'extras/baseUrl',
-    testCaseId: 'testCase/testCaseId',
     testCaseTitle: 'testCase/testCaseTitle',
     moduleName: 'module/moduleName',
     storeModules: 'module/modules'

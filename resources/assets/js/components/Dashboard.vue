@@ -30,9 +30,17 @@
         <v-flex xs6 class="">
           <v-card>
             <v-card-title primary-title class="pb-0 mb-0">
-              <div class="full-width">
-                  <h3 class="headline mb-0">Testings</h3>
-              </div>
+              <v-flex class="full-width">
+                <h2 class="headline mb-0">To-dos</h2>
+                <v-divider></v-divider>
+              </v-flex>
+              <v-flex class="py-2">
+                <ul>
+                  <li>Tokenize Test Case Editing</li>
+                  <li>Tokenize Module Editing</li>
+                  <li>Tokenize Test Scenario Editing</li>
+                </ul>
+              </v-flex>
             </v-card-title>
             <v-card-actions>
 

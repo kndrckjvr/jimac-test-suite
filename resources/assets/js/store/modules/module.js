@@ -3,20 +3,17 @@
 export const state = { 
   modules: [],
   moduleName: 'Module #',
-  moduleId: '',
 }
 
 // getters
 export const getters = {
   modules: state => state.modules,
   moduleName: state => state.moduleName,
-  moduleId: state => state.moduleId,
 }
 
 // actions
 export const actions = {
   setModules: ({commit}) => commit('setModules', payload),
-  setModuleId: ({commit}) => commit('setModuleId', payload),
   setModuleName: ({commit}) => commit('setModuleName', payload),
 }
 
@@ -27,8 +24,5 @@ export const mutations = {
   },
   setModuleName(state, payload) {
     state.moduleName = payload.moduleName
-  },
-  setModuleId(state, payload) {
-    state.moduleId = payload.moduleId
-  },
+  }
 }

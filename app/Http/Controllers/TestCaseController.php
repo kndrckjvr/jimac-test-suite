@@ -32,8 +32,9 @@ class TestCaseController extends Controller
                 'error' => 'The Test Case Title has already been taken.']);
         $testCase = TestCase::find($request->input('testCaseId'));
         $testCase->test_case_name = $request->input('testCaseTitle');
-        $testCase->save();
-        return response()->json(['status' => 1]);
+
+        if($testCase->save()) return response()->json(['status' => 1]);
+        else return response()->json(['status' => 0]);
     }
 
     public function createTestCase(Request $request) {

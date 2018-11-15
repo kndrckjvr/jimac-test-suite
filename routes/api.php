@@ -34,6 +34,7 @@ Route::post('/module/getlatestid', 'ModuleController@getLatestId');
 Route::post('/module/getdata', 'ModuleController@getData');
 Route::post('/module/create', 'ModuleController@createModule');
 Route::post('/module/delete', 'ModuleController@deleteModule');
+Route::post('/module/edit', 'ModuleController@editModule');
 
 // Test Scenario
 Route::post('/testscenario/getdata', 'TestScenarioController@getData');
