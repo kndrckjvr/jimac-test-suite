@@ -127,15 +127,18 @@
       <span>Back to Module Maintenance</span>
     </v-tooltip>
     <rename-module-dialog></rename-module-dialog>
+    <create-test-scenario-dialog></create-test-scenario-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import RenameModuleDialog from '../includes/dialog/RenameModuleDialog';
+import CreateTestScenarioDialog from '../includes/dialog/CreateTestScenarioDialog';
 export default {
   components: {
-    RenameModuleDialog
+    RenameModuleDialog,
+    CreateTestScenarioDialog
   },
   data: () => ({
     loading: true,
@@ -161,7 +164,7 @@ export default {
       this.$store.commit('dialog/showDialog', { dialog : "renameModuleDialog" })
     },
     openCreateScenarioDialog() {
-      
+      this.$store.commit('dialog/showDialog', { dialog : "createTestScenarioDialog" })
     },
     refresh() {
       this.getData()

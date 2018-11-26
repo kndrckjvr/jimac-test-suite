@@ -3,11 +3,11 @@
     :value="show"
     persistent
     scrollable
-    max-width="500">
+    max-width="800">
     <v-card>
       <v-toolbar dark card color="primary">
         <v-icon>view_day</v-icon>
-        <v-toolbar-title>Create Test Case</v-toolbar-title>
+        <v-toolbar-title>Create Test Scenario</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon @click="closeCreateTestScenarioDialog()">
             <v-icon>close</v-icon>
@@ -19,24 +19,47 @@
         class="ma-0"
         color="secondary lighten-1"
         :active="loading" />
-      <v-card-title class="pb-0 mb-0">
-        <v-container fluid grid-list-md>
-          <v-layout>
-            <v-flex >
-
+      <v-card-title>
+        <v-container fluid grid-list-md class="pa-0 ma-0">
+          <v-layout row wrap>
+            <v-flex md12>
+              <v-text-field
+                label="Test Scenario Title"
+                :error-messages="testScenarioTitle"
+                :disabled="loading"
+                v-model="testScenario" />  
             </v-flex>
-            <v-text-field
-              label="Test Case Title"
-              :error-messages="testCaseTitleError"
-              :disabled="loading"
-              v-model="$store.state.testCase.testCaseTitle" />
+             <v-flex md6>
+              <v-textarea
+                outline
+                no-resize
+                v-model="expectedResult"
+                :error-messages="expectedError"
+                label="Expected Result"/>
+            </v-flex>
+            <v-flex md6>
+              <v-textarea
+                outline
+                no-resize
+                v-model="testSteps"
+                :error-messages="testStepsError"
+                label="Test Steps"/>
+            </v-flex>
           </v-layout>
         </v-container>
       </v-card-title>
+      <v-divider></v-divider>
       <v-card-actions>
+        <v-spacer></v-spacer>
         <v-btn
           color="primary"
-          class="full-width"
+          :loading="loading"
+          @click="closeCreateTestScenarioDialog()"
+          flat>
+          Dismiss
+        </v-btn>
+        <v-btn
+          color="primary"
           :loading="loading"
           @click="saveTestCaseName()" >
           Save
@@ -47,16 +70,23 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'CreateTestScenarioDialog', 
   data: () => ({
     loading: false,
-    testCaseTitleError: []
+    testScenarioTitle: '',
+    expectedResult: '',
+    expectedError: [],
+    testSteps: '',
+    testStepsError: []
   }),
+  mounted() {
+
+  },
   methods: {
     closeCreateTestScenarioDialog() {
-      this.$store.commit('dialog/closeDialog', {dialog: "createTestScenario"})
+      this.$store.commit('dialog/closeDialog', {dialog: "createTestScenarioDialog"})
     },
     saveTestCaseName() {
       this.loading = true
@@ -87,7 +117,7 @@ export default {
     }
   },
   computed: mapGetters({
-    show: 'dialog/createTestCaseDialog',
+    show: 'dialog/createTestScenarioDialog',
     baseUrl: 'extras/baseUrl',
     testCaseTitle: 'testCase/testCaseTitle'
   })
