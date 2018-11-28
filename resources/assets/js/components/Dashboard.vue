@@ -39,6 +39,7 @@
                   <li>Tokenize Test Case Editing</li>
                   <li>Tokenize Module Editing</li>
                   <li>Tokenize Test Scenario Editing</li>
+                  <li>Watcher for Cookies</li>
                 </ul>
               </v-flex>
             </v-card-title>

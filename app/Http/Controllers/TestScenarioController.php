@@ -27,6 +27,10 @@ class TestScenarioController extends Controller
         print_r($api_data);
     }
 
+    public function getLatestTitle() {
+        
+    }
+
     public function getPassed($moduleId) {
         $result = 0;
         foreach(
